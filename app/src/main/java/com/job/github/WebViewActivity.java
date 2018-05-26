@@ -13,14 +13,15 @@ import android.webkit.WebViewClient;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
 import java.util.Properties;
 
-import javax.net.ssl.HttpsURLConnection;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static com.job.github.Utils.STATUS_OK;
-import static com.job.github.Utils.getResponseString;
 
 public class WebViewActivity extends AppCompatActivity {
     private static final String TAG = "WebViewActivity";
@@ -55,11 +56,9 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String url = "https://github.com/login/oauth/authorize?client_id=" + clientId + "&redirect_uri=com.job.github.oauth://token";
-        URI uri = URI.create(url);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new OAuthWebClient());
-        webView.loadUrl(uri.toString());
+        webView.loadUrl("https://github.com/login/oauth/authorize?client_id=" + clientId + "&redirect_uri=com.job.github.oauth://token");
     }
 
     private class OAuthWebClient extends WebViewClient {
@@ -94,18 +93,18 @@ public class WebViewActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String url = "https://github.com/login/oauth/access_token?client_id=" + clientId + "&client_secret=" + clientSecret + "&code=" + params[0];
             try {
-                URL u = new URL(url);
-                HttpsURLConnection connection = (HttpsURLConnection) u.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                connection.connect();
-                int status = connection.getResponseCode();
+                OkHttpClient client = new OkHttpClient();
+                Request post = new Request.Builder()
+                        .url(url)
+                        .post(RequestBody.create(MediaType.parse("application/json"), ""))
+                        .build();
+                Response response = client.newCall(post).execute();
+
+                int status = response.code();
                 if (status != STATUS_OK) {
                     return "Error with status " + status;
                 } else {
-                    String response = getResponseString(connection.getInputStream());
-                    return getAccessToken(response);
+                    return response.body() == null ? "Error body is empty" : getAccessToken(response.body().string());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
