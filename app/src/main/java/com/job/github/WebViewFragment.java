@@ -1,5 +1,6 @@
 package com.job.github;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +31,11 @@ public class WebViewFragment extends Fragment {
     private WebView webView;
     private String clientId;
     private String clientSecret;
+    private OnGetToken onGetToken;
+
+    public interface OnGetToken {
+        void onGetToken(String token);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +51,12 @@ public class WebViewFragment extends Fragment {
             clientId = arguments.getString(CLIENT_ID);
             clientSecret = arguments.getString(CLIENT_SECRET);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        onGetToken = (OnGetToken) context;
     }
 
     @Nullable
@@ -101,11 +113,7 @@ public class WebViewFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String token) {
-            if (token.contains("Error")) {
-                Log.d(TAG, "onPostExecute: error" + token);
-            } else {
-                Log.d(TAG, "onPostExecute: complete" + token);
-            }
+            onGetToken.onGetToken(token);
         }
     }
 

@@ -7,9 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WebViewFragment.OnGetToken {
+    private static final String TAG = "MainActivity";
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
 
@@ -56,5 +58,15 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit();
+    }
+
+    @Override
+    public void onGetToken(String token) {
+        setUpFragment(HomeFragment.newInstance(token));
+        if (token.contains("Error")) {
+            Log.d(TAG, "onPostExecute: error" + token);
+        } else {
+            Log.d(TAG, "onPostExecute: complete" + token);
+        }
     }
 }

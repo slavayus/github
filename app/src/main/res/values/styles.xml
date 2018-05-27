@@ -8,9 +8,7 @@
     </style>
 
     <style name="DarkTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="StartAppTextView">
@@ -18,4 +16,8 @@
         <item name="android:text">@string/app_name</item>
         <item name="android:textColor">?attr/startAppText</item>
     </style>
+
+    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
