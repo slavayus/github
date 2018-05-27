@@ -3,7 +3,6 @@ package com.job.github;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,9 +19,8 @@ import android.webkit.WebViewClient;
 import com.job.github.api.App;
 import com.job.github.models.TokenModel;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class WebViewFragment extends Fragment {
@@ -89,7 +87,7 @@ public class WebViewFragment extends Fragment {
             String url = request.getUrl().toString();
             if (url.startsWith("com.job.github.oauth://token")) {
                 String[] urls = url.split("=");
-                new AccessTokenGetter(WebViewFragment.this).execute(clientId, clientSecret, urls[1]);
+                authenticate(urls[1]);
                 return true;
             }
             return false;
@@ -101,42 +99,32 @@ public class WebViewFragment extends Fragment {
         }
     }
 
-    private static class AccessTokenGetter extends AsyncTask<String, Void, String> {
-        private final WeakReference<WebViewFragment> webViewFragmentWeakReference;
-        private ProgressDialog dialog;
+    private void authenticate(String url) {
+        final ProgressDialog dialog = new ProgressDialog(this.getContext());
+        dialog.setMessage("Authentication");
+        dialog.show();
 
-        AccessTokenGetter(WebViewFragment webViewFragment) {
-            webViewFragmentWeakReference = new WeakReference<>(webViewFragment);
-            dialog = new ProgressDialog(webViewFragment.getContext());
-        }
-
-        @Override
-        protected void onPreExecute() {
-            this.dialog.setMessage("Authentication");
-            this.dialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                Response<TokenModel> response = App.getApi().getToken(params[0], params[1], params[2]).execute();
-                return response.code() == STATUS_OK ? response.body().getAccessToken() : "Error with status " + response.code();
-            } catch (IOException e) {
-                e.printStackTrace();
+        App.getApi().getToken(clientId, clientSecret, url).enqueue(new Callback<TokenModel>() {
+            @Override
+            public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
+                dismissDialog();
+                onGetToken.onGetToken(response.code() == STATUS_OK ? response.body().getAccessToken() : "Error with status " + response.code());
             }
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(String token) {
-            if (dialog.isShowing()) {
-                dialog.dismiss();
+            // TODO: 5/27/18 add onFailure method to OnGetToken interface
+            @Override
+            public void onFailure(Call<TokenModel> call, Throwable t) {
+                dismissDialog();
+                onGetToken.onGetToken("ERROR");
             }
-            WebViewFragment webViewFragment = webViewFragmentWeakReference.get();
-            if (webViewFragment != null) {
-                webViewFragment.onGetToken.onGetToken(token);
+
+            private void dismissDialog() {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
             }
-        }
+        });
+
     }
 
     public static WebViewFragment newInstance(String clientId, String clientSecret) {
