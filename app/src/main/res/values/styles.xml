@@ -5,11 +5,18 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="startAppText">@color/startAppTextColor</item>
+        <item name="toolBarTextColor">@color/startAppTextColor</item>
     </style>
 
     <style name="DarkTheme.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="DarkTheme.ToolBar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="titleTextColor">?attr/toolBarTextColor</item>
     </style>
 
     <style name="StartAppTextView">
@@ -18,7 +25,9 @@
         <item name="android:textColor">?attr/startAppText</item>
     </style>
 
-    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:textColorPrimary">?attr/toolBarTextColor</item>
+    </style>
 
     <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
