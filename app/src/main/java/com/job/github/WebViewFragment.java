@@ -1,12 +1,15 @@
 package com.job.github;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -19,39 +22,45 @@ import java.io.IOException;
 
 import retrofit2.Response;
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewFragment extends Fragment {
     private static int STATUS_OK = 200;
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
-    private static final String TAG = "WebViewActivity";
+    private static final String TAG = "WebViewFragment";
     private WebView webView;
     private String clientId;
     private String clientSecret;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_view);
+        loadFromArguments();
+    }
 
-        webView = findViewById(R.id.web_view);
+    private void loadFromArguments() {
+        Bundle arguments = getArguments();
+        if (arguments == null) {
+            throw new IllegalArgumentException("There is no CLIENT_ID and CLIENT_SECRET in the arguments");
+        } else {
+            clientId = arguments.getString(CLIENT_ID);
+            clientSecret = arguments.getString(CLIENT_SECRET);
+        }
+    }
 
-        clientId = getIntent().getStringExtra(CLIENT_ID);
-        clientSecret = getIntent().getStringExtra(CLIENT_SECRET);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_web_view, container, false);
+        webView = view.findViewById(R.id.web_view);
+        return view;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new OAuthWebClient());
         webView.loadUrl("https://github.com/login/oauth/authorize?client_id=" + clientId + "&redirect_uri=com.job.github.oauth://token");
-    }
-
-    public static Intent newInstance(Context context, String clientId, String clientSecret) {
-        Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra(CLIENT_ID, clientId);
-        intent.putExtra(CLIENT_SECRET, clientSecret);
-        return intent;
     }
 
     private class OAuthWebClient extends WebViewClient {
@@ -100,5 +109,14 @@ public class WebViewActivity extends AppCompatActivity {
         }
     }
 
+    public static WebViewFragment newInstance(String clientId, String clientSecret) {
+        Bundle args = new Bundle();
+        args.putString(CLIENT_ID, clientId);
+        args.putString(CLIENT_SECRET, clientSecret);
+
+        WebViewFragment webViewFragment = new WebViewFragment();
+        webViewFragment.setArguments(args);
+        return webViewFragment;
+    }
 
 }

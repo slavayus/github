@@ -59,7 +59,7 @@ public class LaunchActivity extends AppCompatActivity {
             LaunchActivity activity = mActivity.get();
             if (activity != null) {
                 if (msg.what == START_APP) {
-                    activity.startActivity(WebViewActivity.newInstance(activity, activity.clientId, activity.clientSecret));
+                    activity.startActivity(MainActivity.newInstance(activity, activity.clientId, activity.clientSecret));
                     activity.finish();
                 }
             }
