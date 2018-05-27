@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
 
     public void setUpFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment)
+                .replace(R.id.fragment_container, fragment)
                 .commit();
     }
 

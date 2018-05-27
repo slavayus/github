@@ -9,6 +9,7 @@
 
     <style name="DarkTheme.NoActionBar">
         <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="StartAppTextView">
