@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
     private String mToken;
     private UserModel mUser;
     private BottomNavigationView navigation;
+    private String clientId;
+    private String clientSecret;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         if (fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, ReposFragment.newInstance(mUser.getLogin()), REPOS_FRAGMENT)
+                    .replace(R.id.fragment_container, ReposFragment.newInstance(mUser.getLogin(), clientId,clientSecret), REPOS_FRAGMENT)
                     .commit();
         } else {
             getSupportFragmentManager()
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         if (fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, WebViewFragment.newInstance(getIntent().getStringExtra(CLIENT_ID), getIntent().getStringExtra(CLIENT_SECRET)), WEBVIEW_FRAGMENT)
+                    .replace(R.id.fragment_container, WebViewFragment.newInstance(clientId, clientSecret), WEBVIEW_FRAGMENT)
                     .commit();
         } else {
             getSupportFragmentManager()
@@ -102,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        clientId = getIntent().getStringExtra(CLIENT_ID);
+        clientSecret = getIntent().getStringExtra(CLIENT_SECRET);
         setUpWevViewFragment();
 
         navigation = findViewById(R.id.navigation);

@@ -28,23 +28,29 @@ import retrofit2.Response;
 public class ReposFragment extends Fragment {
     private static final String USER_NAME = "USER_NAME";
     private static final String TAG = "ReposFragment";
+    private static String CLIENT_ID = "CLIENT_ID";
+    private static String CLIENT_SECRET = "CLIENT_SECRET";
     private RecyclerView mRecyclerView;
     private String mUserLogin;
+    private String clientId;
+    private String clientSecret;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadUserNameFromArguments();
+        loadDataFromArguments();
         downloadRepos();
         Log.d(TAG, "onCreate: created repos fragment");
     }
 
-    private void loadUserNameFromArguments() {
+    private void loadDataFromArguments() {
         Bundle arguments = getArguments();
         if (arguments == null) {
             throw new IllegalArgumentException("There is no user name in the arguments");
         } else {
             mUserLogin = arguments.getString(USER_NAME);
+            clientId = arguments.getString(CLIENT_ID);
+            clientSecret = arguments.getString(CLIENT_SECRET);
         }
     }
 
@@ -52,10 +58,10 @@ public class ReposFragment extends Fragment {
         if (mUserLogin == null) {
             return;
         }
-        App.getGitHubApi().getRepos(mUserLogin).enqueue(new Callback<List<ReposModel>>() {
+        App.getGitHubApi().getRepos(mUserLogin,clientId,clientSecret).enqueue(new Callback<List<ReposModel>>() {
             @Override
             public void onResponse(Call<List<ReposModel>> call, Response<List<ReposModel>> response) {
-                if(response.body()!=null){
+                if (response.body() != null) {
                     mRecyclerView.setAdapter(new ReposAdapter(response.body()));
                 }
             }
@@ -116,9 +122,11 @@ public class ReposFragment extends Fragment {
     }
 
 
-    public static ReposFragment newInstance(String name) {
+    public static ReposFragment newInstance(String name, String clientId, String clientSecret) {
         Bundle bundle = new Bundle();
         bundle.putString(USER_NAME, name);
+        bundle.putString(CLIENT_ID, clientId);
+        bundle.putString(CLIENT_SECRET, clientSecret);
 
         ReposFragment reposFragment = new ReposFragment();
         reposFragment.setArguments(bundle);
