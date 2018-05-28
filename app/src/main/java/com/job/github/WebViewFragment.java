@@ -11,10 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import com.job.github.api.App;
 import com.job.github.models.TokenModel;
@@ -32,6 +34,7 @@ public class WebViewFragment extends Fragment {
     private String clientId;
     private String clientSecret;
     private OnGetToken onGetToken;
+    private ProgressBar mProgressBar;
 
     public interface OnGetToken {
         void onGetToken(String token);
@@ -64,6 +67,7 @@ public class WebViewFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_web_view, container, false);
         webView = view.findViewById(R.id.web_view);
+        mProgressBar = view.findViewById(R.id.progressBar);
         return view;
     }
 
@@ -72,7 +76,14 @@ public class WebViewFragment extends Fragment {
         super.onResume();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new OAuthWebClient());
+        webView.setWebChromeClient(new OAuthWebChromeClient());
         webView.loadUrl(URLHelper.BASE_URL + URLHelper.AUTHORIZE_URL + "?client_id=" + clientId + "&redirect_uri=" + URLHelper.REDIRECT_URL);
+    }
+
+    private class OAuthWebChromeClient extends WebChromeClient {
+        public void onProgressChanged(WebView view, int progress) {
+            mProgressBar.setProgress(progress);
+        }
     }
 
     private class OAuthWebClient extends WebViewClient {
@@ -96,6 +107,12 @@ public class WebViewFragment extends Fragment {
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             Log.d(TAG, "onReceivedError: " + error.toString());
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 
