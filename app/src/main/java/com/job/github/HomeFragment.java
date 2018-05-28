@@ -1,5 +1,6 @@
 package com.job.github;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -41,6 +42,7 @@ public class HomeFragment extends Fragment {
     private Toolbar mToolbar;
     private ImageView mUserAvatar;
     private OnUserGet mOnUserGetListener;
+    private ProgressDialog dialog;
 
     public interface OnUserGet {
         void onUserGet(UserModel user);
@@ -59,8 +61,23 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showProgressDialog();
         loadTokenFromArguments();
         mHandler = new LoadImageHandler(HomeFragment.this);
+    }
+
+    private void showProgressDialog() {
+        dialog = new ProgressDialog(this.getContext());
+        dialog.setMessage(getResources().getString(R.string.loading_user_data));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    private void stopProgressDialog() {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
     }
 
     private void loadTokenFromArguments() {
@@ -87,6 +104,7 @@ public class HomeFragment extends Fragment {
                     showErrorDialog();
                 } else {
                     updateToolbarText(response.body().getName());
+                    stopProgressDialog();
                     mOnUserGetListener.onUserGet(response.body());
                     if (getActivity() != null) {
                         downloadAvatar(response.body().getAvatarUrl());

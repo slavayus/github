@@ -9,4 +9,5 @@
     <string name="user_home_dialog_error_title">Error</string>
     <string name="user_home_dialog_error_message">Unable to load the page.</string>
     <string name="repositories">Repositories</string>
+    <string name="loading_user_data">Loading user data</string>
 </resources>
