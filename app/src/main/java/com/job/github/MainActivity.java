@@ -29,11 +29,19 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    setUpFragment(HomeFragment.newInstance(mToken), HOME_FRAGMENT);
-                    return true;
+                    if (mToken != null) {
+                        setUpHomeFragment();
+                        return true;
+                    } else {
+                        return false;
+                    }
                 case R.id.navigation_dashboard:
-                    setUpFragment(ReposFragment.newInstance(mUser.getLogin()), REPOS_FRAGMENT);
-                    return true;
+                    if (mUser != null) {
+                        setUpReposFragment();
+                        return true;
+                    } else {
+                        return false;
+                    }
                 case R.id.navigation_notifications:
 
                     return true;
@@ -42,12 +50,57 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         }
     };
 
+    private void setUpReposFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(REPOS_FRAGMENT);
+        if (fragment == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, ReposFragment.newInstance(mUser.getLogin()), REPOS_FRAGMENT)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .attach(fragment)
+                    .commit();
+        }
+    }
+
+    private void setUpHomeFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HOME_FRAGMENT);
+        if (fragment == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, HomeFragment.newInstance(mToken), HOME_FRAGMENT)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .attach(fragment)
+                    .commit();
+        }
+    }
+
+    public void setUpWevViewFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(WEBVIEW_FRAGMENT);
+        if (fragment == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, WebViewFragment.newInstance(getIntent().getStringExtra(CLIENT_ID), getIntent().getStringExtra(CLIENT_SECRET)), WEBVIEW_FRAGMENT)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .attach(fragment)
+                    .commit();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUpFragment(WebViewFragment.newInstance(getIntent().getStringExtra(CLIENT_ID), getIntent().getStringExtra(CLIENT_SECRET)), WEBVIEW_FRAGMENT);
+        setUpWevViewFragment();
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -60,25 +113,10 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         return intent;
     }
 
-    public void setUpFragment(Fragment fragment, String tag) {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if (currentFragment == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment, tag)
-                    .commit();
-        } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .attach(fragment)
-                    .commit();
-        }
-    }
-
     @Override
     public void onGetToken(String token) {
         mToken = token;
-        setUpFragment(HomeFragment.newInstance(token), HOME_FRAGMENT);
+        setUpHomeFragment();
         if (token.contains("Error")) {
             Log.d(TAG, "onPostExecute: error" + token);
         } else {

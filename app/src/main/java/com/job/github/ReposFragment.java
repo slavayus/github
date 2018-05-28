@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,30 +27,37 @@ import retrofit2.Response;
 
 public class ReposFragment extends Fragment {
     private static final String USER_NAME = "USER_NAME";
+    private static final String TAG = "ReposFragment";
     private RecyclerView mRecyclerView;
-    private String mUserName;
+    private String mUserLogin;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadUserNameFromArguments();
         downloadRepos();
+        Log.d(TAG, "onCreate: created repos fragment");
     }
 
     private void loadUserNameFromArguments() {
         Bundle arguments = getArguments();
         if (arguments == null) {
-            throw new IllegalArgumentException("There is no no user name in the arguments");
+            throw new IllegalArgumentException("There is no user name in the arguments");
         } else {
-            mUserName = arguments.getString(USER_NAME);
+            mUserLogin = arguments.getString(USER_NAME);
         }
     }
 
     private void downloadRepos() {
-        App.getGitHubApi().getRepos(mUserName).enqueue(new Callback<List<ReposModel>>() {
+        if (mUserLogin == null) {
+            return;
+        }
+        App.getGitHubApi().getRepos(mUserLogin).enqueue(new Callback<List<ReposModel>>() {
             @Override
             public void onResponse(Call<List<ReposModel>> call, Response<List<ReposModel>> response) {
-                mRecyclerView.setAdapter(new ReposAdapter(response.body()));
+                if(response.body()!=null){
+                    mRecyclerView.setAdapter(new ReposAdapter(response.body()));
+                }
             }
 
             @Override

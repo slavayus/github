@@ -25,5 +25,5 @@ public interface GitHubApi {
     Call<UserModel> getUser(@Query("access_token") String token);
 
     @GET("users/{user_name}/repos")
-    Call<List<ReposModel>> getRepos(@Path(value = "user_name", encoded = true) String userName);
+    Call<List<ReposModel>> getRepos(@Path(value = "user_name") String userName);
 }

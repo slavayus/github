@@ -119,6 +119,8 @@ public class WebViewFragment extends Fragment {
     private void authenticate(String url) {
         final ProgressDialog dialog = new ProgressDialog(this.getContext());
         dialog.setMessage(getResources().getString(R.string.authentication));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
         App.getRegisterApi().getToken(clientId, clientSecret, url).enqueue(new Callback<TokenModel>() {
