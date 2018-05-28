@@ -8,12 +8,20 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.job.github.api.App;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeFragment extends Fragment {
+    private static final String TAG = "HomeFragment";
     private static final String TOKEN = "token";
     private String mToken;
 
@@ -35,15 +43,28 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_home, container, false);
+        final View view = inflater.inflate(R.layout.activity_home, container, false);
 
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("YEEE");
 
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        if (activity != null) {
-            activity.setSupportActionBar(toolbar);
-        }
+        App.getGitHubApi().getUser(mToken).enqueue(new Callback<com.job.github.UserModel>() {
+            @Override
+            public void onResponse(Call<com.job.github.UserModel> call, Response<com.job.github.UserModel> response) {
+                Log.d(TAG, "onResponse: " + response.body().getName());
+                Toolbar toolbar = view.findViewById(R.id.toolbar);
+                toolbar.setTitle(response.body().getName());
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                if (activity != null) {
+                    activity.setSupportActionBar(toolbar);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.job.github.UserModel> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
 
 
         TextView textView = view.findViewById(R.id.token);

@@ -77,7 +77,7 @@ public class WebViewFragment extends Fragment {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new OAuthWebClient());
         webView.setWebChromeClient(new OAuthWebChromeClient());
-        webView.loadUrl(URLHelper.BASE_URL + URLHelper.AUTHORIZE_URL + "?client_id=" + clientId + "&redirect_uri=" + URLHelper.REDIRECT_URL);
+        webView.loadUrl(URLHelper.REGISTER_BASE_URL + URLHelper.AUTHORIZE_URL + "?client_id=" + clientId + "&redirect_uri=" + URLHelper.REDIRECT_URL);
     }
 
     private class OAuthWebChromeClient extends WebChromeClient {
@@ -121,7 +121,7 @@ public class WebViewFragment extends Fragment {
         dialog.setMessage(getResources().getString(R.string.authentication));
         dialog.show();
 
-        App.getApi().getToken(clientId, clientSecret, url).enqueue(new Callback<TokenModel>() {
+        App.getRegisterApi().getToken(clientId, clientSecret, url).enqueue(new Callback<TokenModel>() {
             @Override
             public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
                 dismissDialog();
