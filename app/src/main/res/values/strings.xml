@@ -5,4 +5,5 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="authentication">Authentication</string>
+    <string name="user_avatar">user avatar</string>
 </resources>

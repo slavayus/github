@@ -1,7 +1,7 @@
 package com.job.github.api;
 
-import com.job.github.UserModel;
 import com.job.github.models.TokenModel;
+import com.job.github.models.UserModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
