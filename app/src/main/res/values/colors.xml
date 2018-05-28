@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#171212</color>
     <color name="colorAccent">#2F62D5</color>
     <color name="startAppTextColor">#C9CACB</color>
+    <color name="translucent_scrim_bottom">#80000000</color>
 </resources>
