@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.job.github.URLHelper;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,7 +25,7 @@ public class App extends Application {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://github.com")
+                .baseUrl(URLHelper.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         gitHubApi = retrofit.create(GitHubApi.class);

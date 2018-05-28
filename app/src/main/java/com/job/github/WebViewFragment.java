@@ -72,7 +72,7 @@ public class WebViewFragment extends Fragment {
         super.onResume();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new OAuthWebClient());
-        webView.loadUrl("https://github.com/login/oauth/authorize?client_id=" + clientId + "&redirect_uri=com.job.github.oauth://token");
+        webView.loadUrl(URLHelper.BASE_URL + URLHelper.AUTHORIZE_URL + "?client_id=" + clientId + "&redirect_uri=" + URLHelper.REDIRECT_URL);
     }
 
     private class OAuthWebClient extends WebViewClient {
@@ -85,7 +85,7 @@ public class WebViewFragment extends Fragment {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             String url = request.getUrl().toString();
-            if (url.startsWith("com.job.github.oauth://token")) {
+            if (url.startsWith(URLHelper.REDIRECT_URL)) {
                 String[] urls = url.split("=");
                 authenticate(urls[1]);
                 return true;
