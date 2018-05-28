@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.job.github.models.UserModel;
 
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
     private static String CLIENT_SECRET = "CLIENT_SECRET";
     private String mToken;
     private UserModel mUser;
+    private BottomNavigationView navigation;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -102,8 +104,9 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
 
         setUpWevViewFragment();
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setVisibility(View.GONE);
     }
 
     public static Intent newInstance(Context context, String clientId, String clientSecret) {
@@ -117,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
     public void onGetToken(String token) {
         mToken = token;
         setUpHomeFragment();
+        navigation.setVisibility(View.VISIBLE);
         if (token.contains("Error")) {
             Log.d(TAG, "onPostExecute: error" + token);
         } else {
