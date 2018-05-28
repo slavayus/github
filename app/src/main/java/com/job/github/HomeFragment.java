@@ -1,5 +1,6 @@
 package com.job.github;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -65,16 +67,20 @@ public class HomeFragment extends Fragment {
         App.getGitHubApi().getUser(mToken).enqueue(new Callback<UserModel>() {
             @Override
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                Log.d(TAG, "onResponse: " + response.body().getName());
-                updateToolbarText(response.body().getName());
-                if (getActivity() != null) {
-                    downloadAvatar(response.body().getAvatarUrl());
+                if (response.body() == null) {
+                    showErrorDialog();
+                } else {
+                    updateToolbarText(response.body().getName());
+                    if (getActivity() != null) {
+                        downloadAvatar(response.body().getAvatarUrl());
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<UserModel> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
+                showErrorDialog();
             }
         });
 
@@ -91,6 +97,25 @@ public class HomeFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void showErrorDialog() {
+        if (getActivity() == null) {
+            return;
+        }
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.user_home_dialog_error_title)
+                .setMessage(R.string.user_home_dialog_error_message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getActivity().finishAffinity();
+                    }
+                })
+                .setCancelable(false)
+                .create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
     private void downloadAvatar(final String avatarUrl) {
