@@ -1,5 +1,6 @@
 package com.job.github;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,11 +40,27 @@ public class HomeFragment extends Fragment {
     private LoadImageHandler mHandler;
     private Toolbar mToolbar;
     private ImageView mUserAvatar;
+    private OnUserGet mOnUserGetListener;
+
+    public interface OnUserGet {
+        void onUserGet(UserModel user);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mOnUserGetListener = (OnUserGet) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "must implement OnUserGet");
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadTokenFromArguments();
+        mHandler = new LoadImageHandler(HomeFragment.this);
     }
 
     private void loadTokenFromArguments() {
@@ -53,7 +70,6 @@ public class HomeFragment extends Fragment {
         } else {
             mToken = arguments.getString(TOKEN);
         }
-        mHandler = new LoadImageHandler(HomeFragment.this);
     }
 
     @Nullable
@@ -71,6 +87,7 @@ public class HomeFragment extends Fragment {
                     showErrorDialog();
                 } else {
                     updateToolbarText(response.body().getName());
+                    mOnUserGetListener.onUserGet(response.body());
                     if (getActivity() != null) {
                         downloadAvatar(response.body().getAvatarUrl());
                     }

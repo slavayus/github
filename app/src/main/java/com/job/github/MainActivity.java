@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements WebViewFragment.OnGetToken {
+import com.job.github.models.UserModel;
+
+public class MainActivity extends AppCompatActivity implements WebViewFragment.OnGetToken, HomeFragment.OnUserGet {
     private static final String TAG = "MainActivity";
     private static final String HOME_FRAGMENT = "HOME_FRAGMENT";
     private static final String REPOS_FRAGMENT = "REPOS_FRAGMENT";
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
     private String mToken;
+    private UserModel mUser;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -29,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
                     setUpFragment(HomeFragment.newInstance(mToken), HOME_FRAGMENT);
                     return true;
                 case R.id.navigation_dashboard:
-                    setUpFragment(new ReposFragment(), REPOS_FRAGMENT);
+                    setUpFragment(ReposFragment.newInstance(mUser.getLogin()), REPOS_FRAGMENT);
                     return true;
                 case R.id.navigation_notifications:
 
@@ -81,5 +84,10 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         } else {
             Log.d(TAG, "onPostExecute: complete" + token);
         }
+    }
+
+    @Override
+    public void onUserGet(UserModel user) {
+        this.mUser = user;
     }
 }
