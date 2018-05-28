@@ -12,9 +12,12 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements WebViewFragment.OnGetToken {
     private static final String TAG = "MainActivity";
+    private static final String HOME_FRAGMENT = "HOME_FRAGMENT";
+    private static final String REPOS_FRAGMENT = "REPOS_FRAGMENT";
+    private static final String WEBVIEW_FRAGMENT = "WEBVIEW_FRAGMENT";
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
-
+    private String mToken;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -23,10 +26,10 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
+                    setUpFragment(HomeFragment.newInstance(mToken), HOME_FRAGMENT);
                     return true;
                 case R.id.navigation_dashboard:
-
+                    setUpFragment(new ReposFragment(), REPOS_FRAGMENT);
                     return true;
                 case R.id.navigation_notifications:
 
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUpFragment(WebViewFragment.newInstance(getIntent().getStringExtra(CLIENT_ID), getIntent().getStringExtra(CLIENT_SECRET)));
+        setUpFragment(WebViewFragment.newInstance(getIntent().getStringExtra(CLIENT_ID), getIntent().getStringExtra(CLIENT_SECRET)), WEBVIEW_FRAGMENT);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -54,15 +57,25 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         return intent;
     }
 
-    public void setUpFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+    public void setUpFragment(Fragment fragment, String tag) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (currentFragment == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment, tag)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .attach(fragment)
+                    .commit();
+        }
     }
 
     @Override
     public void onGetToken(String token) {
-        setUpFragment(HomeFragment.newInstance(token));
+        mToken = token;
+        setUpFragment(HomeFragment.newInstance(token), HOME_FRAGMENT);
         if (token.contains("Error")) {
             Log.d(TAG, "onPostExecute: error" + token);
         } else {
