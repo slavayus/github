@@ -133,6 +133,7 @@ public class ReposFragment extends Fragment {
             }
 
             mRepoLanguage.setText(reposModel.getLanguage());
+            mRepoLanguage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_language_color_shape, 0, 0, 0);
 
             if (reposModel.getLicenseModel() == null) {
                 mRepoLicense.setVisibility(View.GONE);
