@@ -10,7 +10,7 @@ public class ReposModel {
     private String name;
     @SerializedName("description")
     @Expose
-    private Object description;
+    private String description;
     @SerializedName("url")
     @Expose
     private String url;
@@ -20,7 +20,7 @@ public class ReposModel {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
-    @SerializedName("licenseModel")
+    @SerializedName("license")
     @Expose
     private LicenseModel licenseModel;
 
@@ -32,11 +32,11 @@ public class ReposModel {
         this.name = name;
     }
 
-    public Object getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(Object description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

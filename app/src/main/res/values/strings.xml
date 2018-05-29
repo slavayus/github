@@ -10,4 +10,8 @@
     <string name="user_home_dialog_error_message">Unable to load the page.</string>
     <string name="repositories">Repositories</string>
     <string name="loading_user_data">Loading user data</string>
+    <string name="repo_name">repo name</string>
+    <string name="repo_description">repo description</string>
+    <string name="repo_language">repo language</string>
+    <string name="repo_license">repo license</string>
 </resources>

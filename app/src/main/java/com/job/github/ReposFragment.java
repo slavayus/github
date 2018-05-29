@@ -58,7 +58,7 @@ public class ReposFragment extends Fragment {
         if (mUserLogin == null) {
             return;
         }
-        App.getGitHubApi().getRepos(mUserLogin,clientId,clientSecret).enqueue(new Callback<List<ReposModel>>() {
+        App.getGitHubApi().getRepos(mUserLogin, clientId, clientSecret).enqueue(new Callback<List<ReposModel>>() {
             @Override
             public void onResponse(Call<List<ReposModel>> call, Response<List<ReposModel>> response) {
                 if (response.body() != null) {
@@ -99,7 +99,7 @@ public class ReposFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ReposHolder holder, int position) {
-            holder.bind(mData.get(position).getName());
+            holder.bind(mData.get(position));
         }
 
         @Override
@@ -109,15 +109,26 @@ public class ReposFragment extends Fragment {
     }
 
     private class ReposHolder extends RecyclerView.ViewHolder {
-        private final TextView mTextView;
+        private final TextView mRepoName;
+        private final TextView mRepoDescription;
+        private final TextView mRepoLanguage;
+        private final TextView mRepoLicense;
 
         ReposHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_repo, parent, false));
-            mTextView = itemView.findViewById(R.id.repo_name);
+            mRepoName = itemView.findViewById(R.id.repo_name);
+            mRepoDescription = itemView.findViewById(R.id.repo_description);
+            mRepoLanguage = itemView.findViewById(R.id.repo_language);
+            mRepoLicense = itemView.findViewById(R.id.repo_license);
         }
 
-        void bind(String repoName) {
-            mTextView.setText(repoName);
+        void bind(ReposModel repoName) {
+            mRepoName.setText(repoName.getName());
+            mRepoDescription.setText(repoName.getDescription());
+            mRepoLanguage.setText(repoName.getLanguage());
+            if (repoName.getLicenseModel() != null) {
+                mRepoLicense.setText(repoName.getLicenseModel().getName());
+            }
         }
     }
 
