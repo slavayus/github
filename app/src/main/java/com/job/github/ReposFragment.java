@@ -122,12 +122,23 @@ public class ReposFragment extends Fragment {
             mRepoLicense = itemView.findViewById(R.id.repo_license);
         }
 
-        void bind(ReposModel repoName) {
-            mRepoName.setText(repoName.getName());
-            mRepoDescription.setText(repoName.getDescription());
-            mRepoLanguage.setText(repoName.getLanguage());
-            if (repoName.getLicenseModel() != null) {
-                mRepoLicense.setText(repoName.getLicenseModel().getName());
+        void bind(ReposModel reposModel) {
+            mRepoName.setText(reposModel.getName());
+
+            if (reposModel.getDescription() == null) {
+                mRepoDescription.setVisibility(View.GONE);
+            } else {
+                mRepoDescription.setVisibility(View.VISIBLE);
+                mRepoDescription.setText(reposModel.getDescription());
+            }
+
+            mRepoLanguage.setText(reposModel.getLanguage());
+
+            if (reposModel.getLicenseModel() == null) {
+                mRepoLicense.setVisibility(View.GONE);
+            } else {
+                mRepoLicense.setVisibility(View.VISIBLE);
+                mRepoLicense.setText(reposModel.getLicenseModel().getName());
             }
         }
     }

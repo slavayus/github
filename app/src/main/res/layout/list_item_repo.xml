@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:text="@string/repo_license"
+        android:drawableStart="@drawable/ic_license"
         app:layout_constraintBottom_toBottomOf="@+id/repo_language"
         app:layout_constraintStart_toEndOf="@+id/repo_language" />
 
