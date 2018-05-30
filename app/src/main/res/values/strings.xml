@@ -14,4 +14,5 @@
     <string name="repo_description">repo description</string>
     <string name="repo_language">repo language</string>
     <string name="repo_license">repo license</string>
+    <string name="repo_stars">repo stars</string>
 </resources>

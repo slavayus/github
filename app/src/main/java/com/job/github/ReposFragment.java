@@ -113,6 +113,7 @@ public class ReposFragment extends Fragment {
         private final TextView mRepoDescription;
         private final TextView mRepoLanguage;
         private final TextView mRepoLicense;
+        private final TextView mRepoStars;
 
         ReposHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_repo, parent, false));
@@ -120,6 +121,7 @@ public class ReposFragment extends Fragment {
             mRepoDescription = itemView.findViewById(R.id.repo_description);
             mRepoLanguage = itemView.findViewById(R.id.repo_language);
             mRepoLicense = itemView.findViewById(R.id.repo_license);
+            mRepoStars = itemView.findViewById(R.id.repo_stars);
         }
 
         void bind(ReposModel reposModel) {
@@ -134,6 +136,13 @@ public class ReposFragment extends Fragment {
 
             mRepoLanguage.setText(reposModel.getLanguage());
             mRepoLanguage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_language_color_shape, 0, 0, 0);
+
+            if (reposModel.getStargazersCount() == 0) {
+                mRepoStars.setVisibility(View.GONE);
+            } else {
+                mRepoStars.setVisibility(View.VISIBLE);
+                mRepoStars.setText(String.valueOf(reposModel.getStargazersCount()));
+            }
 
             if (reposModel.getLicenseModel() == null) {
                 mRepoLicense.setVisibility(View.GONE);

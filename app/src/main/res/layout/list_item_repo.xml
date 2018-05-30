@@ -9,45 +9,51 @@
 
     <TextView
         android:id="@+id/repo_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/DarkTheme.TextView.RepoName"
         android:text="@string/repo_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/repo_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/list_item_repo_text_view_separator"
+        style="@style/DarkTheme.TextView"
+        android:gravity="start"
         android:text="@string/repo_description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/repo_name" />
 
-    <TextView
-        android:id="@+id/repo_language"
-        android:layout_width="wrap_content"
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flex_box_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/list_item_repo_text_view_separator"
-        android:text="@string/repo_language"
+        app:flexWrap="wrap"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repo_description" />
+        app:layout_constraintTop_toBottomOf="@+id/repo_description">
 
-    <TextView
-        android:id="@+id/repo_license"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:drawableStart="@drawable/ic_license"
-        android:text="@string/repo_license"
-        app:layout_constraintBottom_toBottomOf="@+id/repo_language"
-        app:layout_constraintStart_toEndOf="@+id/repo_language" />
+        <TextView
+            android:id="@+id/repo_language"
+            style="@style/DarkTheme.TextView"
+            android:text="@string/repo_language" />
+
+        <TextView
+            android:id="@+id/repo_stars"
+            style="@style/DarkTheme.TextView"
+            android:drawableStart="@drawable/ic_repo_star"
+            android:padding="0dp"
+            android:text="@string/repo_stars" />
+
+        <TextView
+            android:id="@+id/repo_license"
+            style="@style/DarkTheme.TextView"
+            android:drawableStart="@drawable/ic_license"
+            android:text="@string/repo_license" />
+    </com.google.android.flexbox.FlexboxLayout>
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:background="?attr/startAppText"
-        app:layout_constraintTop_toBottomOf="@id/repo_license" />
+        app:layout_constraintTop_toBottomOf="@id/flex_box_layout" />
 
 </android.support.constraint.ConstraintLayout>

@@ -23,6 +23,17 @@ public class ReposModel {
     @SerializedName("license")
     @Expose
     private LicenseModel licenseModel;
+    @SerializedName("stargazers_count")
+    @Expose
+    private Integer stargazersCount;
+
+    public Integer getStargazersCount() {
+        return stargazersCount;
+    }
+
+    public void setStargazersCount(Integer stargazersCount) {
+        this.stargazersCount = stargazersCount;
+    }
 
     public String getName() {
         return name;

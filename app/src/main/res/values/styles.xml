@@ -19,15 +19,32 @@
         <item name="titleTextColor">?attr/toolBarTextColor</item>
     </style>
 
+    <style name="DarkTheme.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/text_view_padding</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/list_item_repo_text_view_separator</item>
+        <item name="android:layout_marginEnd">@dimen/activity_horizontal_margin</item>
+    </style>
+
+    <style name="DarkTheme.TextView.RepoName">
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">?attr/colorAccent</item>
+    </style>
+
     <style name="StartAppTextView">
         <item name="android:textSize">60sp</item>
         <item name="android:text">@string/app_name</item>
         <item name="android:textColor">?attr/startAppText</item>
     </style>
 
-    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">?attr/toolBarTextColor</item>
     </style>
 
     <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <dimen name="text_view_padding">6dp</dimen>
 </resources>
