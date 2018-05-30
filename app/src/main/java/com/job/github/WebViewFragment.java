@@ -2,7 +2,6 @@ package com.job.github;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -79,12 +78,7 @@ public class WebViewFragment extends Fragment implements WebViewContractView {
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.web_view_dialog_error_title)
                 .setMessage(R.string.web_view_dialog_error_message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        getActivity().finishAffinity();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> getActivity().finishAffinity())
                 .setCancelable(false)
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);

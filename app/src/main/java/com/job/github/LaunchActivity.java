@@ -26,12 +26,7 @@ public class LaunchActivity extends AppCompatActivity {
 
         loadClientDataFromAssets();
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mHandler.sendEmptyMessage(START_APP);
-            }
-        }, Math.max(1000 - (start - System.currentTimeMillis()), 0));
+        mHandler.postDelayed(() -> mHandler.sendEmptyMessage(START_APP), Math.max(1000 - (start - System.currentTimeMillis()), 0));
     }
 
     private void loadClientDataFromAssets() {

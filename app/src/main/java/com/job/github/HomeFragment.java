@@ -2,7 +2,6 @@ package com.job.github;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -106,13 +105,8 @@ public class HomeFragment extends Fragment implements HomeContractView {
         textView.setText(mToken);
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view1 -> Snackbar.make(view1, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
 
         HomeContractModel homeModel = new HomeModel();
         HomePresenter mPresenter = new HomePresenter(homeModel);
@@ -130,12 +124,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.user_home_dialog_error_title)
                 .setMessage(R.string.user_home_dialog_error_message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        getActivity().finishAffinity();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> getActivity().finishAffinity())
                 .setCancelable(false)
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);

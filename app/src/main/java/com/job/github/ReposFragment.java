@@ -1,6 +1,5 @@
 package com.job.github;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -95,12 +94,7 @@ public class ReposFragment extends Fragment implements ReposContractView {
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.user_load_repos_error_title)
                 .setMessage(R.string.user_load_repos_error_message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        getActivity().finishAffinity();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> getActivity().finishAffinity())
                 .setCancelable(false)
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);
