@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.job.github.models.UserModel;
+import com.job.github.pojo.User;
 
 public class MainActivity extends AppCompatActivity implements WebViewFragment.OnGetToken, HomeFragment.OnUserGet {
     private static final String TAG = "MainActivity";
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
     private String mToken;
-    private UserModel mUser;
+    private User mUser;
     private BottomNavigationView navigation;
     private String clientId;
     private String clientSecret;
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
     }
 
     @Override
-    public void onUserGet(UserModel user) {
+    public void onUserGet(User user) {
         this.mUser = user;
     }
 }

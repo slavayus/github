@@ -1,6 +1,6 @@
-package com.job.github;
+package com.job.github.presenter;
 
-import com.job.github.models.Repos;
+import com.job.github.pojo.Repos;
 
 import java.util.List;
 

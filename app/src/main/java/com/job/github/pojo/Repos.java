@@ -1,5 +1,5 @@
 
-package com.job.github.models;
+package com.job.github.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -22,7 +22,7 @@ public class Repos {
     private String updatedAt;
     @SerializedName("license")
     @Expose
-    private LicenseModel licenseModel;
+    private License license;
     @SerializedName("stargazers_count")
     @Expose
     private Integer stargazersCount;
@@ -75,12 +75,12 @@ public class Repos {
         this.updatedAt = updatedAt;
     }
 
-    public LicenseModel getLicenseModel() {
-        return licenseModel;
+    public License getLicense() {
+        return license;
     }
 
-    public void setLicenseModel(LicenseModel licenseModel) {
-        this.licenseModel = licenseModel;
+    public void setLicense(License license) {
+        this.license = license;
     }
 
 }

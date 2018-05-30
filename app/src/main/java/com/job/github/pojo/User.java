@@ -1,4 +1,4 @@
-package com.job.github.models;
+package com.job.github.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.net.URL;
 import java.util.Date;
 
-public class UserModel {
+public class User {
 
     @SerializedName("login")
     @Expose

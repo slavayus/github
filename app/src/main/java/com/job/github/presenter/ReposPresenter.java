@@ -1,24 +1,25 @@
-package com.job.github;
+package com.job.github.presenter;
 
-import com.job.github.models.Repos;
+import com.job.github.model.ReposContractModel;
+import com.job.github.pojo.Repos;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-class ReposPresenter {
+public class ReposPresenter {
 
     private final ReposContractModel model;
     private WeakReference<ReposContractView> view;
 
-    ReposPresenter(ReposContractModel model) {
+    public ReposPresenter(ReposContractModel model) {
         this.model = model;
     }
 
-    void viewIsReady() {
+    public void viewIsReady() {
         downloadRepos();
     }
 
-    void attachView(ReposContractView view) {
+    public void attachView(ReposContractView view) {
         this.view = new WeakReference<>(view);
     }
 

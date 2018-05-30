@@ -19,7 +19,8 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.job.github.api.App;
-import com.job.github.models.TokenModel;
+import com.job.github.api.URLHelper;
+import com.job.github.pojo.Token;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -123,16 +124,16 @@ public class WebViewFragment extends Fragment {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        App.getRegisterApi().getToken(clientId, clientSecret, url).enqueue(new Callback<TokenModel>() {
+        App.getRegisterApi().getToken(clientId, clientSecret, url).enqueue(new Callback<Token>() {
             @Override
-            public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
+            public void onResponse(Call<Token> call, Response<Token> response) {
                 dismissDialog();
                 onGetToken.onGetToken(response.code() == STATUS_OK ? response.body().getAccessToken() : "Error with status " + response.code());
             }
 
             // TODO: 5/27/18 add onFailure method to OnGetToken interface
             @Override
-            public void onFailure(Call<TokenModel> call, Throwable t) {
+            public void onFailure(Call<Token> call, Throwable t) {
                 dismissDialog();
                 onGetToken.onGetToken("ERROR");
             }

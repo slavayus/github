@@ -1,4 +1,4 @@
-package com.job.github;
+package com.job.github.api;
 
 /**
  * Created by slavik on 5/28/18.

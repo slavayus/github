@@ -1,10 +1,10 @@
 
-package com.job.github.models;
+package com.job.github.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TokenModel {
+public class Token {
 
     @SerializedName("access_token")
     @Expose

@@ -14,7 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.job.github.models.Repos;
+import com.job.github.model.ReposContractModel;
+import com.job.github.model.ReposModel;
+import com.job.github.pojo.Repos;
+import com.job.github.presenter.ReposContractView;
+import com.job.github.presenter.ReposPresenter;
 
 import java.util.List;
 
@@ -164,11 +168,11 @@ public class ReposFragment extends Fragment implements ReposContractView {
                 mRepoStars.setText(String.valueOf(repos.getStargazersCount()));
             }
 
-            if (repos.getLicenseModel() == null) {
+            if (repos.getLicense() == null) {
                 mRepoLicense.setVisibility(View.GONE);
             } else {
                 mRepoLicense.setVisibility(View.VISIBLE);
-                mRepoLicense.setText(repos.getLicenseModel().getName());
+                mRepoLicense.setText(repos.getLicense().getName());
             }
         }
     }

@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.job.github.api.App;
-import com.job.github.models.UserModel;
+import com.job.github.pojo.User;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
     private ProgressDialog dialog;
 
     public interface OnUserGet {
-        void onUserGet(UserModel user);
+        void onUserGet(User user);
     }
 
     @Override
@@ -97,9 +97,9 @@ public class HomeFragment extends Fragment {
         mToolbar = view.findViewById(R.id.toolbar);
         mUserAvatar = view.findViewById(R.id.user_avatar);
 
-        App.getGitHubApi().getUser(mToken).enqueue(new Callback<UserModel>() {
+        App.getGitHubApi().getUser(mToken).enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 if (response.body() == null) {
                     showErrorDialog();
                 } else {
@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<UserModel> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 showErrorDialog();
             }

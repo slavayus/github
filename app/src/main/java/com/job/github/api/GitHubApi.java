@@ -1,8 +1,8 @@
 package com.job.github.api;
 
-import com.job.github.models.Repos;
-import com.job.github.models.TokenModel;
-import com.job.github.models.UserModel;
+import com.job.github.pojo.Repos;
+import com.job.github.pojo.Token;
+import com.job.github.pojo.User;
 
 import java.util.List;
 
@@ -19,10 +19,10 @@ import retrofit2.http.Query;
 public interface GitHubApi {
     @Headers({"Accept: application/json"})
     @GET("/login/oauth/access_token")
-    Call<TokenModel> getToken(@Query("client_id") String clientId, @Query("client_secret") String clientSecret, @Query("code") String code);
+    Call<Token> getToken(@Query("client_id") String clientId, @Query("client_secret") String clientSecret, @Query("code") String code);
 
     @GET("/user")
-    Call<UserModel> getUser(@Query("access_token") String token);
+    Call<User> getUser(@Query("access_token") String token);
 
     @GET("users/{user_name}/repos?sort=pushed")
     Call<List<Repos>> getRepos(@Path(value = "user_name") String userName, @Query("client_id") String clientId, @Query("client_secret") String clientSecret);
