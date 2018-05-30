@@ -14,4 +14,8 @@ public interface ReposContractView {
     String getClientSecret();
 
     void showLoadReposError();
+
+    void showLoaderFragment();
+
+    void stopLoaderFragment();
 }
