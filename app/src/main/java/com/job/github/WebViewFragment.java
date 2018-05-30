@@ -2,11 +2,13 @@ package com.job.github;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,27 +20,75 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.job.github.api.App;
 import com.job.github.api.URLHelper;
-import com.job.github.pojo.Token;
+import com.job.github.model.WebViewContractModel;
+import com.job.github.model.WebViewModel;
+import com.job.github.presenter.WebViewContractView;
+import com.job.github.presenter.WebViewPresenter;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class WebViewFragment extends Fragment {
-    private static int STATUS_OK = 200;
-    private static String CLIENT_ID = "CLIENT_ID";
-    private static String CLIENT_SECRET = "CLIENT_SECRET";
+public class WebViewFragment extends Fragment implements WebViewContractView {
+    private static final String CLIENT_ID = "CLIENT_ID";
+    private static final String CLIENT_SECRET = "CLIENT_SECRET";
     private static final String TAG = "WebViewFragment";
-    private WebView webView;
-    private String clientId;
-    private String clientSecret;
+    private WebView mWebView;
+    private String mClientId;
+    private String mClientSecret;
     private OnGetToken onGetToken;
     private ProgressBar mProgressBar;
+    private WebViewPresenter mPresenter;
+    private ProgressDialog mDialog;
+
 
     public interface OnGetToken {
         void onGetToken(String token);
+    }
+
+
+
+    @Override
+    public void loadUrl(String path) {
+        mWebView.loadUrl(path);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        mDialog = new ProgressDialog(this.getContext());
+        mDialog.setMessage(getResources().getString(R.string.authentication));
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onGetToken(String token) {
+        onGetToken.onGetToken(token);
+    }
+
+    @Override
+    public void showErrorDialog() {
+        if (getActivity() == null) {
+            return;
+        }
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.web_view_dialog_error_title)
+                .setMessage(R.string.web_view_dialog_error_message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getActivity().finishAffinity();
+                    }
+                })
+                .setCancelable(false)
+                .create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
     @Override
@@ -52,8 +102,8 @@ public class WebViewFragment extends Fragment {
         if (arguments == null) {
             throw new IllegalArgumentException("There is no CLIENT_ID and CLIENT_SECRET in the arguments");
         } else {
-            clientId = arguments.getString(CLIENT_ID);
-            clientSecret = arguments.getString(CLIENT_SECRET);
+            mClientId = arguments.getString(CLIENT_ID);
+            mClientSecret = arguments.getString(CLIENT_SECRET);
         }
     }
 
@@ -67,18 +117,24 @@ public class WebViewFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_web_view, container, false);
-        webView = view.findViewById(R.id.web_view);
+        mWebView = view.findViewById(R.id.web_view);
         mProgressBar = view.findViewById(R.id.progressBar);
+
+        WebViewContractModel webViewModel = new WebViewModel();
+        mPresenter = new WebViewPresenter(webViewModel);
+        mPresenter.attachView(this);
+        mPresenter.viewIsReady();
+
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new OAuthWebClient());
-        webView.setWebChromeClient(new OAuthWebChromeClient());
-        webView.loadUrl(URLHelper.REGISTER_BASE_URL + URLHelper.AUTHORIZE_URL + "?client_id=" + clientId + "&redirect_uri=" + URLHelper.REDIRECT_URL);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setWebViewClient(new OAuthWebClient());
+        mWebView.setWebChromeClient(new OAuthWebChromeClient());
+        mPresenter.resume(mClientId);
     }
 
     private class OAuthWebChromeClient extends WebChromeClient {
@@ -99,7 +155,7 @@ public class WebViewFragment extends Fragment {
             String url = request.getUrl().toString();
             if (url.startsWith(URLHelper.REDIRECT_URL)) {
                 String[] urls = url.split("=");
-                authenticate(urls[1]);
+                mPresenter.authenticate(mClientId, mClientSecret, urls[1]);
                 return true;
             }
             return false;
@@ -115,36 +171,6 @@ public class WebViewFragment extends Fragment {
             super.onPageFinished(view, url);
             mProgressBar.setVisibility(View.GONE);
         }
-    }
-
-    private void authenticate(String url) {
-        final ProgressDialog dialog = new ProgressDialog(this.getContext());
-        dialog.setMessage(getResources().getString(R.string.authentication));
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-
-        App.getRegisterApi().getToken(clientId, clientSecret, url).enqueue(new Callback<Token>() {
-            @Override
-            public void onResponse(Call<Token> call, Response<Token> response) {
-                dismissDialog();
-                onGetToken.onGetToken(response.code() == STATUS_OK ? response.body().getAccessToken() : "Error with status " + response.code());
-            }
-
-            // TODO: 5/27/18 add onFailure method to OnGetToken interface
-            @Override
-            public void onFailure(Call<Token> call, Throwable t) {
-                dismissDialog();
-                onGetToken.onGetToken("ERROR");
-            }
-
-            private void dismissDialog() {
-                if (dialog.isShowing()) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
     }
 
     public static WebViewFragment newInstance(String clientId, String clientSecret) {

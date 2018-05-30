@@ -17,4 +17,6 @@
     <string name="repo_stars">repo stars</string>
     <string name="user_load_repos_error_title">Error</string>
     <string name="user_load_repos_error_message">Failed to load repositories</string>
+    <string name="web_view_dialog_error_title">Error</string>
+    <string name="web_view_dialog_error_message">Failed to authenticate</string>
 </resources>
