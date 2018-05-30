@@ -6,11 +6,13 @@ import com.job.github.pojo.User;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * Created by slavik on 5/26/18.
@@ -26,4 +28,7 @@ public interface GitHubApi {
 
     @GET("users/{user_name}/repos?sort=pushed")
     Call<List<Repos>> getRepos(@Path(value = "user_name") String userName, @Query("client_id") String clientId, @Query("client_secret") String clientSecret);
+
+    @GET
+    Call<ResponseBody> loadAvatar(@Url String url);
 }

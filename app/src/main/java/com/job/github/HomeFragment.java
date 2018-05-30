@@ -4,10 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,29 +13,22 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.job.github.api.App;
+import com.job.github.model.HomeContractModel;
+import com.job.github.model.HomeModel;
 import com.job.github.pojo.User;
+import com.job.github.presenter.HomeContractView;
+import com.job.github.presenter.HomePresenter;
 
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements HomeContractView {
     private static final String TAG = "HomeFragment";
     private static final String TOKEN = "token";
-    private static final Integer IMAGE_LOADED = 0;
     private String mToken;
-    private LoadImageHandler mHandler;
     private Toolbar mToolbar;
     private ImageView mUserAvatar;
     private OnUserGet mOnUserGetListener;
@@ -61,12 +51,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showProgressDialog();
         loadTokenFromArguments();
-        mHandler = new LoadImageHandler(HomeFragment.this);
     }
 
-    private void showProgressDialog() {
+    @Override
+    public void showProgressDialog() {
         dialog = new ProgressDialog(this.getContext());
         dialog.setMessage(getResources().getString(R.string.loading_user_data));
         dialog.setCancelable(false);
@@ -74,10 +63,26 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
-    private void stopProgressDialog() {
+    @Override
+    public String getToken() {
+        return mToken;
+    }
+
+    @Override
+    public void stopProgressDialog() {
         if (dialog.isShowing()) {
             dialog.dismiss();
         }
+    }
+
+    @Override
+    public void onUserGet(User data) {
+        mOnUserGetListener.onUserGet(data);
+    }
+
+    @Override
+    public void showUserAvatar(Bitmap image) {
+        mUserAvatar.setImageBitmap(image);
     }
 
     private void loadTokenFromArguments() {
@@ -97,29 +102,6 @@ public class HomeFragment extends Fragment {
         mToolbar = view.findViewById(R.id.toolbar);
         mUserAvatar = view.findViewById(R.id.user_avatar);
 
-        App.getGitHubApi().getUser(mToken).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.body() == null) {
-                    showErrorDialog();
-                } else {
-                    updateToolbarText(response.body().getName());
-                    stopProgressDialog();
-                    mOnUserGetListener.onUserGet(response.body());
-                    if (getActivity() != null) {
-                        downloadAvatar(response.body().getAvatarUrl());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-                showErrorDialog();
-            }
-        });
-
-
         TextView textView = view.findViewById(R.id.token);
         textView.setText(mToken);
 
@@ -131,10 +113,17 @@ public class HomeFragment extends Fragment {
                         .setAction("Action", null).show();
             }
         });
+
+        HomeContractModel homeModel = new HomeModel();
+        HomePresenter mPresenter = new HomePresenter(homeModel);
+        mPresenter.attachView(this);
+        mPresenter.viewIsReady();
+
         return view;
     }
 
-    private void showErrorDialog() {
+    @Override
+    public void showErrorDialog() {
         if (getActivity() == null) {
             return;
         }
@@ -153,42 +142,8 @@ public class HomeFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void downloadAvatar(final String avatarUrl) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    InputStream in = new java.net.URL(avatarUrl).openStream();
-                    Message message = mHandler.obtainMessage(IMAGE_LOADED, BitmapFactory.decodeStream(in));
-                    mHandler.sendMessage(message);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    private static class LoadImageHandler extends Handler {
-        private final WeakReference<HomeFragment> mActivity;
-
-        LoadImageHandler(HomeFragment fragment) {
-            mActivity = new WeakReference<>(fragment);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            HomeFragment activity = mActivity.get();
-            if (activity != null) {
-                if (msg.what == IMAGE_LOADED) {
-                    Bitmap image = (Bitmap) msg.obj;
-                    activity.mUserAvatar.setImageBitmap(image);
-                }
-            }
-        }
-    }
-
-    private void updateToolbarText(String name) {
+    @Override
+    public void updateToolbarText(String name) {
         mToolbar.setTitle(name);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
