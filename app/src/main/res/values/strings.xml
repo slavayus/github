@@ -15,4 +15,6 @@
     <string name="repo_language">repo language</string>
     <string name="repo_license">repo license</string>
     <string name="repo_stars">repo stars</string>
+    <string name="user_load_repos_error_title">Error</string>
+    <string name="user_load_repos_error_message">Failed to load repositories</string>
 </resources>

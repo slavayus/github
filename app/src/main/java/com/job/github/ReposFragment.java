@@ -1,9 +1,11 @@
 package com.job.github;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,34 +14,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.job.github.api.App;
-import com.job.github.models.ReposModel;
+import com.job.github.models.Repos;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-/**
- * Created by slavik on 5/28/18.
- */
-
-public class ReposFragment extends Fragment {
+public class ReposFragment extends Fragment implements ReposContractView {
     private static final String USER_NAME = "USER_NAME";
     private static final String TAG = "ReposFragment";
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
     private RecyclerView mRecyclerView;
     private String mUserLogin;
-    private String clientId;
-    private String clientSecret;
+    private String mClientId;
+    private String mClientSecret;
+    private ReposPresenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadDataFromArguments();
-        downloadRepos();
         Log.d(TAG, "onCreate: created repos fragment");
     }
 
@@ -49,28 +42,9 @@ public class ReposFragment extends Fragment {
             throw new IllegalArgumentException("There is no user name in the arguments");
         } else {
             mUserLogin = arguments.getString(USER_NAME);
-            clientId = arguments.getString(CLIENT_ID);
-            clientSecret = arguments.getString(CLIENT_SECRET);
+            mClientId = arguments.getString(CLIENT_ID);
+            mClientSecret = arguments.getString(CLIENT_SECRET);
         }
-    }
-
-    private void downloadRepos() {
-        if (mUserLogin == null) {
-            return;
-        }
-        App.getGitHubApi().getRepos(mUserLogin, clientId, clientSecret).enqueue(new Callback<List<ReposModel>>() {
-            @Override
-            public void onResponse(Call<List<ReposModel>> call, Response<List<ReposModel>> response) {
-                if (response.body() != null) {
-                    mRecyclerView.setAdapter(new ReposAdapter(response.body()));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<ReposModel>> call, Throwable t) {
-
-            }
-        });
     }
 
     @Nullable
@@ -80,13 +54,59 @@ public class ReposFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recycler_view_repos);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
+        ReposContractModel reposModel = new ReposModel();
+        mPresenter = new ReposPresenter(reposModel);
+        mPresenter.attachView(this);
+        mPresenter.viewIsReady();
+
         return view;
     }
 
-    private class ReposAdapter extends RecyclerView.Adapter<ReposHolder> {
-        private List<ReposModel> mData;
+    @Override
+    public void showRepos(List<Repos> data) {
+        mRecyclerView.setAdapter(new ReposFragment.ReposAdapter(data));
+    }
 
-        ReposAdapter(List<ReposModel> data) {
+    @Override
+    public String getUserLogin() {
+        return mUserLogin;
+    }
+
+    @Override
+    public String getClientId() {
+        return mClientId;
+    }
+
+    @Override
+    public String getClientSecret() {
+        return mClientSecret;
+    }
+
+    @Override
+    public void showLoadReposError() {
+        if (getActivity() == null) {
+            return;
+        }
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.user_load_repos_error_title)
+                .setMessage(R.string.user_load_repos_error_message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getActivity().finishAffinity();
+                    }
+                })
+                .setCancelable(false)
+                .create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    private class ReposAdapter extends RecyclerView.Adapter<ReposHolder> {
+        private List<Repos> mData;
+
+        ReposAdapter(List<Repos> data) {
             this.mData = data;
         }
 
@@ -124,31 +144,31 @@ public class ReposFragment extends Fragment {
             mRepoStars = itemView.findViewById(R.id.repo_stars);
         }
 
-        void bind(ReposModel reposModel) {
-            mRepoName.setText(reposModel.getName());
+        void bind(Repos repos) {
+            mRepoName.setText(repos.getName());
 
-            if (reposModel.getDescription() == null) {
+            if (repos.getDescription() == null) {
                 mRepoDescription.setVisibility(View.GONE);
             } else {
                 mRepoDescription.setVisibility(View.VISIBLE);
-                mRepoDescription.setText(reposModel.getDescription());
+                mRepoDescription.setText(repos.getDescription());
             }
 
-            mRepoLanguage.setText(reposModel.getLanguage());
+            mRepoLanguage.setText(repos.getLanguage());
             mRepoLanguage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_language_color_shape, 0, 0, 0);
 
-            if (reposModel.getStargazersCount() == 0) {
+            if (repos.getStargazersCount() == 0) {
                 mRepoStars.setVisibility(View.GONE);
             } else {
                 mRepoStars.setVisibility(View.VISIBLE);
-                mRepoStars.setText(String.valueOf(reposModel.getStargazersCount()));
+                mRepoStars.setText(String.valueOf(repos.getStargazersCount()));
             }
 
-            if (reposModel.getLicenseModel() == null) {
+            if (repos.getLicenseModel() == null) {
                 mRepoLicense.setVisibility(View.GONE);
             } else {
                 mRepoLicense.setVisibility(View.VISIBLE);
-                mRepoLicense.setText(reposModel.getLicenseModel().getName());
+                mRepoLicense.setText(repos.getLicenseModel().getName());
             }
         }
     }

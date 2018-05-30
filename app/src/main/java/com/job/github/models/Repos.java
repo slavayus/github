@@ -4,7 +4,7 @@ package com.job.github.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ReposModel {
+public class Repos {
     @SerializedName("name")
     @Expose
     private String name;

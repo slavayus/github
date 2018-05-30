@@ -1,6 +1,6 @@
 package com.job.github.api;
 
-import com.job.github.models.ReposModel;
+import com.job.github.models.Repos;
 import com.job.github.models.TokenModel;
 import com.job.github.models.UserModel;
 
@@ -25,5 +25,5 @@ public interface GitHubApi {
     Call<UserModel> getUser(@Query("access_token") String token);
 
     @GET("users/{user_name}/repos?sort=pushed")
-    Call<List<ReposModel>> getRepos(@Path(value = "user_name") String userName, @Query("client_id") String clientId, @Query("client_secret") String clientSecret);
+    Call<List<Repos>> getRepos(@Path(value = "user_name") String userName, @Query("client_id") String clientId, @Query("client_secret") String clientSecret);
 }
