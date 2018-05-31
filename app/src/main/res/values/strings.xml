@@ -19,13 +19,18 @@
     <string name="user_load_repos_error_message">Failed to load repositories</string>
     <string name="web_view_dialog_error_title">Error</string>
     <string name="web_view_dialog_error_message">Failed to authenticate</string>
-    <string name="user_email">Email</string>
+    <string name="user_email">Public email</string>
     <string name="user_blog">Blog</string>
     <string name="user_location">Location</string>
     <string name="user_company">Company</string>
-    <string name="user_bio">Add bio</string>
+    <string name="user_bio">Bio</string>
     <string name="done_button">Done</string>
     <string name="cancel_button">Cancel</string>
     <string name="user_home_dialog_error_update_user_info_message">Some problems occurred while updating user info</string>
     <string name="user_bio_alert_dialog_title">Bio</string>
+    <string name="user_name">Name</string>
+    <string name="user_url">URL</string>
+    <string name="public_profile">Public profile</string>
+    <string name="user_bio_message">You can @mention other users and organizations to link to them.</string>
+    <string name="user_company_message">You can @mention your company’s GitHub organization to link it.</string>
 </resources>

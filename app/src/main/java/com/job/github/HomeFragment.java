@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -128,8 +127,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
         userBlog.setOnClickListener(v -> mPresenter.userBlogButtonClick());
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(view1 -> Snackbar.make(view1, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        fab.setOnClickListener(view1 -> startActivity(new Intent(HomeFragment.this.getContext(), EditUserInfoActivity.class)));
 
         mPresenter.viewIsReady();
 

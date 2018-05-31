@@ -36,6 +36,25 @@
         <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
     </style>
 
+    <style name="DarkTheme.TextView.Edit">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/edit_user_info_text_size</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:layout_marginStart">@dimen/activity_vertical_margin</item>
+    </style>
+
+    <style name="DarkTheme.EditText" />
+
+    <style name="DarkTheme.EditText.Edit">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:inputType">text</item>
+        <item name="android:layout_marginEnd">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginStart">@dimen/activity_vertical_margin</item>
+    </style>
+
     <style name="DarkTheme.TextView.Home.Link">
         <item name="android:textColor">?attr/colorAccent</item>
         <item name="android:clickable">true</item>
@@ -62,4 +81,5 @@
     <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <dimen name="text_view_padding">6dp</dimen>
+    <dimen name="edit_user_info_text_size">20sp</dimen>
 </resources>
