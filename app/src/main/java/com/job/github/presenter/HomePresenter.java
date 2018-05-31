@@ -32,7 +32,8 @@ public class HomePresenter {
 
             @Override
             public void onSuccess(User data) {
-                savedView.updateToolbarText(data.getName(),data.getLogin());
+                savedView.updateToolbarText(data.getName(), data.getLogin());
+                savedView.updateUserInfo(data);
                 savedView.onUserGet(data);
                 savedView.stopProgressDialog();
                 downloadAvatar(data.getAvatarUrl());

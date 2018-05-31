@@ -33,6 +33,11 @@ public class HomeFragment extends Fragment implements HomeContractView {
     private OnUserGet mOnUserGetListener;
     private ProgressDialog dialog;
     private TextView mToolbarSubtitle;
+    private TextView userBio;
+    private TextView userCompany;
+    private TextView userLocation;
+    private TextView userBlog;
+    private TextView userEmail;
 
     public interface OnUserGet {
         void onUserGet(User user);
@@ -103,8 +108,11 @@ public class HomeFragment extends Fragment implements HomeContractView {
         mToolbarSubtitle = view.findViewById(R.id.action_bar_subtitle);
         mUserAvatar = view.findViewById(R.id.user_avatar);
 
-        TextView textView = view.findViewById(R.id.token);
-        textView.setText(mToken);
+        userBio = view.findViewById(R.id.user_bio);
+        userCompany = view.findViewById(R.id.user_company);
+        userLocation = view.findViewById(R.id.user_location);
+        userBlog = view.findViewById(R.id.user_blog);
+        userEmail = view.findViewById(R.id.user_email);
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(view1 -> Snackbar.make(view1, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -141,6 +149,15 @@ public class HomeFragment extends Fragment implements HomeContractView {
         if (activity != null) {
             activity.setSupportActionBar(mToolbar);
         }
+    }
+
+    @Override
+    public void updateUserInfo(User user) {
+        userBio.setText(user.getBio());
+        userCompany.setText(user.getCompany());
+        userLocation.setText(user.getLocation());
+        userEmail.setText(user.getEmail());
+        userBlog.setText(user.getBlog());
     }
 
     public static HomeFragment newInstance(String token) {

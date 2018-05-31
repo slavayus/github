@@ -35,6 +35,9 @@ public class User {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("bio")
+    @Expose
+    private String bio;
     @SerializedName("public_repos")
     @Expose
     private String publicRepos;
@@ -174,4 +177,11 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 }

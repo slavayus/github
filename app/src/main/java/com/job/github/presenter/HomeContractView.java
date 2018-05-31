@@ -19,4 +19,6 @@ public interface HomeContractView {
     void onUserGet(User data);
 
     void showUserAvatar(Bitmap image);
+
+    void updateUserInfo(User user);
 }

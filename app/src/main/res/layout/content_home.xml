@@ -7,10 +7,45 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/fragment_home">
 
-    <TextView
-        android:id="@+id/token"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"/>
+        android:orientation="vertical"
+        android:padding="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:id="@+id/user_bio"
+            style="@style/DarkTheme.TextView"
+            android:text="@string/loading_user_data" />
+
+        <TextView
+            android:id="@+id/user_company"
+            style="@style/DarkTheme.TextView"
+            android:drawableStart="@drawable/ic_company"
+            android:gravity="start"
+            android:text="@string/loading_user_data" />
+
+        <TextView
+            android:id="@+id/user_location"
+            style="@style/DarkTheme.TextView"
+            android:drawableStart="@drawable/ic_location"
+            android:gravity="start"
+            android:text="@string/loading_user_data" />
+
+        <TextView
+            android:id="@+id/user_email"
+            style="@style/DarkTheme.TextView"
+            android:drawableStart="@drawable/ic_blog"
+            android:gravity="start"
+            android:text="@string/loading_user_data" />
+
+        <TextView
+            android:id="@+id/user_blog"
+            style="@style/DarkTheme.TextView"
+            android:drawableStart="@drawable/ic_blog"
+            android:gravity="start"
+            android:text="@string/loading_user_data" />
+
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
