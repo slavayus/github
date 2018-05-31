@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -122,6 +123,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
         userBlog = view.findViewById(R.id.user_blog);
         userEmail = view.findViewById(R.id.user_email);
 
+        userBio.setOnClickListener(v -> mPresenter.userBioButtonClick());
         userEmail.setOnClickListener(v -> mPresenter.userEmailButtonClick());
         userBlog.setOnClickListener(v -> mPresenter.userBlogButtonClick());
 
@@ -143,6 +145,21 @@ public class HomeFragment extends Fragment implements HomeContractView {
                 .setTitle(R.string.user_home_dialog_error_title)
                 .setMessage(R.string.user_home_dialog_error_message)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> getActivity().finishAffinity())
+                .setCancelable(false)
+                .create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    @Override
+    public void showErrorUpdateUserInfoDialog() {
+        if (getActivity() == null) {
+            return;
+        }
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.user_home_dialog_error_title)
+                .setMessage(R.string.user_home_dialog_error_update_user_info_message)
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .setCancelable(false)
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);
@@ -183,11 +200,27 @@ public class HomeFragment extends Fragment implements HomeContractView {
     }
 
     @Override
+    public void openEditBioDialog() {
+        if (getContext() == null) {
+            return;
+        }
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.edit_bio_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText edt = dialogView.findViewById(R.id.edit_bio);
+
+        dialogBuilder.setTitle(R.string.user_bio_alert_dialog_title);
+        dialogBuilder.setPositiveButton(R.string.done_button, (dialog, whichButton) -> mPresenter.newBio(edt.getText().toString()));
+        dialogBuilder.setNegativeButton(R.string.cancel_button, (dialog, whichButton) -> dialog.dismiss());
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    @Override
     public void updateUserInfo(User user) {
-        if (user.getBio() == null) {
-            userBio.setVisibility(View.GONE);
-        } else {
-            userBio.setVisibility(View.VISIBLE);
+        if (user.getBio() != null) {
             userBio.setText(user.getBio());
         }
 

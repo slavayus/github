@@ -25,4 +25,8 @@ public interface HomeContractView {
     void openBrowser();
 
     void openMail();
+
+    void openEditBioDialog();
+
+    void showErrorUpdateUserInfoDialog();
 }

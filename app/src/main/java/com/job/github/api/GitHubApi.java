@@ -8,15 +8,13 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.PATCH;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
-
-/**
- * Created by slavik on 5/26/18.
- */
 
 public interface GitHubApi {
     @Headers({"Accept: application/json"})
@@ -31,4 +29,7 @@ public interface GitHubApi {
 
     @GET
     Call<ResponseBody> loadAvatar(@Url String url);
+
+    @PATCH("/user")
+    Call<User> updateBio(@Query("access_token") String token, @Body User user);
 }

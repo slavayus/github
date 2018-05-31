@@ -26,7 +26,7 @@ public class WebViewPresenter {
     public void resume(String clientId) {
         WebViewContractView savedView = view.get();
         if (savedView != null) {
-            savedView.loadUrl(URLHelper.REGISTER_BASE_URL + URLHelper.AUTHORIZE_URL + "?client_id=" + clientId + "&redirect_uri=" + URLHelper.REDIRECT_URL);
+            savedView.loadUrl(URLHelper.REGISTER_BASE_URL + URLHelper.AUTHORIZE_URL + "?client_id=" + clientId + "&redirect_uri=" + URLHelper.REDIRECT_URL+"&scope=user,public_repo");
         }
     }
 

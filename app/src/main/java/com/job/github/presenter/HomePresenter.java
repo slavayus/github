@@ -84,4 +84,38 @@ public class HomePresenter {
         storedView.openMail();
         Log.d(TAG, "userEmailButtonClick: ");
     }
+
+    public void userBioButtonClick() {
+        HomeContractView storedView = view.get();
+        if (storedView != null) {
+            storedView.openEditBioDialog();
+        }
+    }
+
+    public void newBio(String text) {
+        HomeContractView storedView = view.get();
+        if (storedView == null) {
+            return;
+        }
+        User user = new User();
+        user.setBio(text);
+        model.updateUserInfo(user, storedView.getToken(), new HomeContractModel.UpdateUserInfo() {
+
+            @Override
+            public void onSuccess(User user) {
+                HomeContractView savedView = view.get();
+                if (savedView != null) {
+                    savedView.updateUserInfo(user);
+                }
+            }
+
+            @Override
+            public void onError() {
+                HomeContractView savedView = view.get();
+                if (savedView != null) {
+                    savedView.showErrorUpdateUserInfoDialog();
+                }
+            }
+        });
+    }
 }

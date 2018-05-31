@@ -54,4 +54,25 @@ public class HomeModel implements HomeContractModel {
             }
         });
     }
+
+    @Override
+    public void updateUserInfo(User user, String token, UpdateUserInfo updateUserInfo) {
+        App.getGitHubApi().updateBio(token, user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    if (response.body()!=null) {
+                        updateUserInfo.onSuccess(response.body());
+                        return;
+                    }
+                }
+                updateUserInfo.onError();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                updateUserInfo.onError();
+            }
+        });
+    }
 }

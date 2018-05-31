@@ -9,6 +9,8 @@ public interface HomeContractModel {
 
     void loadAvatar(String avatarUrl, OnDownloadAvatar onDownloadAvatar);
 
+    void updateUserInfo(User user, String token, UpdateUserInfo updateUserInfo);
+
     interface OnLoadUser {
         void onSuccess(User data);
 
@@ -16,7 +18,13 @@ public interface HomeContractModel {
     }
 
     interface OnDownloadAvatar {
-        void onSuccess(Bitmap iamge);
+        void onSuccess(Bitmap image);
+
+        void onError();
+    }
+
+    interface UpdateUserInfo {
+        void onSuccess(User user);
 
         void onError();
     }
