@@ -8,43 +8,39 @@
     tools:showIn="@layout/fragment_home">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_vertical_margin">
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/user_bio"
-            style="@style/DarkTheme.TextView"
-            android:text="@string/loading_user_data" />
+            style="@style/DarkTheme.TextView.Home"
+            android:text="@string/user_bio" />
 
         <TextView
             android:id="@+id/user_company"
-            style="@style/DarkTheme.TextView"
+            style="@style/DarkTheme.TextView.Home"
             android:drawableStart="@drawable/ic_company"
-            android:gravity="start"
-            android:text="@string/loading_user_data" />
+            android:text="@string/user_company" />
 
         <TextView
             android:id="@+id/user_location"
-            style="@style/DarkTheme.TextView"
+            style="@style/DarkTheme.TextView.Home"
             android:drawableStart="@drawable/ic_location"
-            android:gravity="start"
-            android:text="@string/loading_user_data" />
+            android:text="@string/user_location" />
 
         <TextView
             android:id="@+id/user_email"
-            style="@style/DarkTheme.TextView"
-            android:drawableStart="@drawable/ic_blog"
-            android:gravity="start"
-            android:text="@string/loading_user_data" />
+            style="@style/DarkTheme.TextView.Home.Link"
+            android:drawableStart="@drawable/ic_dialog_email"
+            android:text="@string/user_email" />
 
         <TextView
             android:id="@+id/user_blog"
-            style="@style/DarkTheme.TextView"
+            style="@style/DarkTheme.TextView.Home.Link"
             android:drawableStart="@drawable/ic_blog"
-            android:gravity="start"
-            android:text="@string/loading_user_data" />
+            android:text="@string/user_blog" />
 
     </LinearLayout>
 

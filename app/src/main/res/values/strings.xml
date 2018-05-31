@@ -19,4 +19,9 @@
     <string name="user_load_repos_error_message">Failed to load repositories</string>
     <string name="web_view_dialog_error_title">Error</string>
     <string name="web_view_dialog_error_message">Failed to authenticate</string>
+    <string name="user_email">Email</string>
+    <string name="user_blog">Blog</string>
+    <string name="user_location">Location</string>
+    <string name="user_company">Company</string>
+    <string name="user_bio">Bio</string>
 </resources>
