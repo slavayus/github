@@ -21,4 +21,6 @@ public interface HomeContractView {
     void showUserAvatar(Bitmap image);
 
     void updateUserInfo(User user);
+
+    void openBrowser();
 }

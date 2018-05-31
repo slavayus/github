@@ -1,6 +1,7 @@
 package com.job.github.presenter;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.job.github.model.HomeContractModel;
 import com.job.github.pojo.User;
@@ -9,6 +10,7 @@ import java.lang.ref.WeakReference;
 
 
 public class HomePresenter {
+    private static final String TAG = "HomePresenter";
     private final HomeContractModel model;
     private WeakReference<HomeContractView> view;
 
@@ -62,5 +64,15 @@ public class HomePresenter {
 
             }
         });
+    }
+
+    // TODO: 5/31/18 save user in model and get the url from the stored user
+    public void userBlogButtonClick() {
+        HomeContractView storedView = view.get();
+        if (storedView == null) {
+            return;
+        }
+        storedView.openBrowser();
+        Log.d(TAG, "userBlogButtonClick: ");
     }
 }

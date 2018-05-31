@@ -2,7 +2,9 @@ package com.job.github;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,6 +40,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
     private TextView userLocation;
     private TextView userBlog;
     private TextView userEmail;
+    private HomePresenter mPresenter;
 
     public interface OnUserGet {
         void onUserGet(User user);
@@ -104,6 +107,11 @@ public class HomeFragment extends Fragment implements HomeContractView {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        HomeContractModel homeModel = new HomeModel();
+        mPresenter = new HomePresenter(homeModel);
+        mPresenter.attachView(this);
+
+
         mToolbar = view.findViewById(R.id.toolbar);
         mToolbarSubtitle = view.findViewById(R.id.action_bar_subtitle);
         mUserAvatar = view.findViewById(R.id.user_avatar);
@@ -114,13 +122,12 @@ public class HomeFragment extends Fragment implements HomeContractView {
         userBlog = view.findViewById(R.id.user_blog);
         userEmail = view.findViewById(R.id.user_email);
 
+        userBlog.setOnClickListener(v -> mPresenter.userBlogButtonClick());
+
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(view1 -> Snackbar.make(view1, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
-        HomeContractModel homeModel = new HomeModel();
-        HomePresenter mPresenter = new HomePresenter(homeModel);
-        mPresenter.attachView(this);
         mPresenter.viewIsReady();
 
         return view;
@@ -152,12 +159,55 @@ public class HomeFragment extends Fragment implements HomeContractView {
     }
 
     @Override
+    public void openBrowser() {
+        String url = userBlog.getText().toString();
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://" + url;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+    }
+
+    @Override
     public void updateUserInfo(User user) {
-        userBio.setText(user.getBio());
-        userCompany.setText(user.getCompany());
-        userLocation.setText(user.getLocation());
-        userEmail.setText(user.getEmail());
-        userBlog.setText(user.getBlog());
+        if (user.getBio() == null) {
+            userBio.setVisibility(View.GONE);
+        } else {
+            userBio.setVisibility(View.VISIBLE);
+            userBio.setText(user.getBio());
+        }
+
+        if (user.getCompany() == null) {
+            userCompany.setVisibility(View.GONE);
+        } else {
+            userCompany.setVisibility(View.VISIBLE);
+            userCompany.setText(user.getCompany());
+        }
+
+        if (user.getLogin() == null) {
+            userLocation.setVisibility(View.GONE);
+        } else {
+            userLocation.setVisibility(View.VISIBLE);
+            userLocation.setText(user.getLocation());
+        }
+
+        if (user.getEmail() == null) {
+            userEmail.setVisibility(View.GONE);
+        } else {
+            userEmail.setVisibility(View.VISIBLE);
+            userEmail.setText(user.getEmail());
+        }
+
+        if (user.getBlog() == null) {
+            userBlog.setVisibility(View.GONE);
+        } else {
+            userBlog.setVisibility(View.VISIBLE);
+            userBlog.setText(user.getBlog());
+        }
     }
 
     public static HomeFragment newInstance(String token) {
@@ -168,5 +218,4 @@ public class HomeFragment extends Fragment implements HomeContractView {
         homeFragment.setArguments(bundle);
         return homeFragment;
     }
-
 }
