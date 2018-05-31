@@ -32,6 +32,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
     private ImageView mUserAvatar;
     private OnUserGet mOnUserGetListener;
     private ProgressDialog dialog;
+    private TextView mToolbarSubtitle;
 
     public interface OnUserGet {
         void onUserGet(User user);
@@ -99,6 +100,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mToolbar = view.findViewById(R.id.toolbar);
+        mToolbarSubtitle = view.findViewById(R.id.action_bar_subtitle);
         mUserAvatar = view.findViewById(R.id.user_avatar);
 
         TextView textView = view.findViewById(R.id.token);
@@ -132,8 +134,9 @@ public class HomeFragment extends Fragment implements HomeContractView {
     }
 
     @Override
-    public void updateToolbarText(String name) {
+    public void updateToolbarText(String name, String login) {
         mToolbar.setTitle(name);
+        mToolbarSubtitle.setText(login);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
             activity.setSupportActionBar(mToolbar);

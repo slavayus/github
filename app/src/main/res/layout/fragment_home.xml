@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            app:collapsedTitleGravity="top"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
@@ -40,6 +41,13 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/DarkTheme.PopupOverlay" />
+
+            <TextView
+                android:id="@+id/action_bar_subtitle"
+                style="@style/DarkTheme.TextView"
+                android:textSize="@dimen/toolbar_subtitle_text_size"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="@dimen/toolbar_subtitle_text_margin" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

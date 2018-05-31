@@ -12,7 +12,7 @@ public interface HomeContractView {
 
     void showErrorDialog();
 
-    void updateToolbarText(String name);
+    void updateToolbarText(String name, String login);
 
     void stopProgressDialog();
 

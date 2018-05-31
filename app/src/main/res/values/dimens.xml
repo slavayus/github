@@ -7,4 +7,6 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_scrim_height_bottom">88dp</dimen>
     <dimen name="list_item_repo_text_view_separator">8dp</dimen>
+    <dimen name="toolbar_subtitle_text_margin">28dp</dimen>
+    <dimen name="toolbar_subtitle_text_size">18sp</dimen>
 </resources>
