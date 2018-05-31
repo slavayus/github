@@ -23,4 +23,6 @@ public interface HomeContractView {
     void updateUserInfo(User user);
 
     void openBrowser();
+
+    void openMail();
 }

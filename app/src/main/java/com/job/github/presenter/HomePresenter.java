@@ -75,4 +75,13 @@ public class HomePresenter {
         storedView.openBrowser();
         Log.d(TAG, "userBlogButtonClick: ");
     }
+
+    public void userEmailButtonClick() {
+        HomeContractView storedView = view.get();
+        if (storedView == null) {
+            return;
+        }
+        storedView.openMail();
+        Log.d(TAG, "userEmailButtonClick: ");
+    }
 }

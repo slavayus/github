@@ -122,6 +122,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
         userBlog = view.findViewById(R.id.user_blog);
         userEmail = view.findViewById(R.id.user_email);
 
+        userEmail.setOnClickListener(v -> mPresenter.userEmailButtonClick());
         userBlog.setOnClickListener(v -> mPresenter.userBlogButtonClick());
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
@@ -170,6 +171,15 @@ public class HomeFragment extends Fragment implements HomeContractView {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setData(Uri.parse(url));
         startActivity(intent);
+    }
+
+    @Override
+    public void openMail() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:" + userEmail.getText()));
+        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(emailIntent);
     }
 
     @Override
