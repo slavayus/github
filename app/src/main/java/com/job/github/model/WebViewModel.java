@@ -1,6 +1,6 @@
 package com.job.github.model;
 
-import com.job.github.api.App;
+import com.job.github.component.DaggerGitHubApiComponent;
 import com.job.github.pojo.Token;
 import com.job.github.presenter.WebViewContractView;
 
@@ -16,7 +16,10 @@ public class WebViewModel implements WebViewContractModel {
 
     @Override
     public void authenticate(String clientId, String clientSecret, String url, final WebViewContractView.OnAuthenticate onAuthenticate) {
-        App.getRegisterApi().getToken(clientId, clientSecret, url).enqueue(new Callback<Token>() {
+        DaggerGitHubApiComponent
+                .create()
+                .getGitHubRegisterService()
+                .getToken(clientId, clientSecret, url).enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful()) {
