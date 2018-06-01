@@ -22,17 +22,22 @@ import com.job.github.presenter.ReposPresenter;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class ReposFragment extends Fragment implements ReposContractView {
     private static final String USER_NAME = "USER_NAME";
     private static final String TAG = "ReposFragment";
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view_repos) RecyclerView mRecyclerView;
     private String mUserLogin;
     private String mClientId;
     private String mClientSecret;
     private ReposPresenter mPresenter;
     private LoaderFragment loaderFragment;
+    private Unbinder bind;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +61,9 @@ public class ReposFragment extends Fragment implements ReposContractView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_repos, container, false);
-        mRecyclerView = view.findViewById(R.id.recycler_view_repos);
+
+        bind = ButterKnife.bind(this, view);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
@@ -66,6 +73,12 @@ public class ReposFragment extends Fragment implements ReposContractView {
         mPresenter.viewIsReady();
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bind.unbind();
     }
 
     @Override
@@ -140,7 +153,8 @@ public class ReposFragment extends Fragment implements ReposContractView {
         @Override
         public ReposHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            return new ReposHolder(layoutInflater, parent);
+            View view = layoutInflater.inflate(R.layout.list_item_repo, parent, false);
+            return new ReposHolder(view);
         }
 
         @Override
@@ -154,20 +168,16 @@ public class ReposFragment extends Fragment implements ReposContractView {
         }
     }
 
-    private class ReposHolder extends RecyclerView.ViewHolder {
-        private final TextView mRepoName;
-        private final TextView mRepoDescription;
-        private final TextView mRepoLanguage;
-        private final TextView mRepoLicense;
-        private final TextView mRepoStars;
+    class ReposHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.repo_name) TextView mRepoName;
+        @BindView(R.id.repo_description) TextView mRepoDescription;
+        @BindView(R.id.repo_language) TextView mRepoLanguage;
+        @BindView(R.id.repo_license) TextView mRepoLicense;
+        @BindView(R.id.repo_stars) TextView mRepoStars;
 
-        ReposHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_repo, parent, false));
-            mRepoName = itemView.findViewById(R.id.repo_name);
-            mRepoDescription = itemView.findViewById(R.id.repo_description);
-            mRepoLanguage = itemView.findViewById(R.id.repo_language);
-            mRepoLicense = itemView.findViewById(R.id.repo_license);
-            mRepoStars = itemView.findViewById(R.id.repo_stars);
+        ReposHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
 
         void bind(Repos repos) {

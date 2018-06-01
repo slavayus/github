@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,21 +25,27 @@ import com.job.github.pojo.User;
 import com.job.github.presenter.HomeContractView;
 import com.job.github.presenter.HomePresenter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
+
 public class HomeFragment extends Fragment implements HomeContractView {
     private static final String TAG = "HomeFragment";
     private static final String TOKEN = "token";
     private String mToken;
-    private Toolbar mToolbar;
-    private ImageView mUserAvatar;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.user_avatar) ImageView mUserAvatar;
     private OnUserGet mOnUserGetListener;
     private ProgressDialog dialog;
-    private TextView mToolbarSubtitle;
-    private TextView userBio;
-    private TextView userCompany;
-    private TextView userLocation;
-    private TextView userBlog;
-    private TextView userEmail;
+    @BindView(R.id.action_bar_subtitle) TextView mToolbarSubtitle;
+    @BindView(R.id.user_bio) TextView userBio;
+    @BindView(R.id.user_company) TextView userCompany;
+    @BindView(R.id.user_location) TextView userLocation;
+    @BindView(R.id.user_blog) TextView userBlog;
+    @BindView(R.id.user_email) TextView userEmail;
     private HomePresenter mPresenter;
+    private Unbinder bind;
 
     public interface OnUserGet {
         void onUserGet(User user);
@@ -106,32 +111,41 @@ public class HomeFragment extends Fragment implements HomeContractView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
+        bind = ButterKnife.bind(this, view);
 
         HomeContractModel homeModel = new HomeModel();
         mPresenter = new HomePresenter(homeModel);
         mPresenter.attachView(this);
-
-
-        mToolbar = view.findViewById(R.id.toolbar);
-        mToolbarSubtitle = view.findViewById(R.id.action_bar_subtitle);
-        mUserAvatar = view.findViewById(R.id.user_avatar);
-
-        userBio = view.findViewById(R.id.user_bio);
-        userCompany = view.findViewById(R.id.user_company);
-        userLocation = view.findViewById(R.id.user_location);
-        userBlog = view.findViewById(R.id.user_blog);
-        userEmail = view.findViewById(R.id.user_email);
-
-        userBio.setOnClickListener(v -> mPresenter.userBioButtonClick());
-        userEmail.setOnClickListener(v -> mPresenter.userEmailButtonClick());
-        userBlog.setOnClickListener(v -> mPresenter.userBlogButtonClick());
-
-        FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(view1 -> startActivity(new Intent(HomeFragment.this.getContext(), EditUserInfoActivity.class)));
-
         mPresenter.viewIsReady();
 
         return view;
+    }
+
+
+    @OnClick(R.id.fab)
+    void fabClick() {
+        startActivity(new Intent(HomeFragment.this.getContext(), EditUserInfoActivity.class));
+    }
+
+    @OnClick({R.id.user_bio, R.id.user_email, R.id.user_blog})
+    void userInfoClick(View view) {
+        switch (view.getId()) {
+            case R.id.user_bio:
+                mPresenter.userBioButtonClick();
+                break;
+            case R.id.user_email:
+                mPresenter.userEmailButtonClick();
+                break;
+            case R.id.user_blog:
+                mPresenter.userBlogButtonClick();
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bind.unbind();
     }
 
     @Override

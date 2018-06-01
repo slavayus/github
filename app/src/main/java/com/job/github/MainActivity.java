@@ -12,6 +12,9 @@ import android.view.View;
 
 import com.job.github.pojo.User;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements WebViewFragment.OnGetToken, HomeFragment.OnUserGet {
     private static final String TAG = "MainActivity";
     private static final String HOME_FRAGMENT = "HOME_FRAGMENT";
@@ -21,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
     private static String CLIENT_SECRET = "CLIENT_SECRET";
     private String mToken;
     private User mUser;
-    private BottomNavigationView navigation;
+    @BindView(R.id.navigation) BottomNavigationView navigation;
     private String clientId;
     private String clientSecret;
 
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         if (fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, ReposFragment.newInstance(mUser.getLogin(), clientId,clientSecret), REPOS_FRAGMENT)
+                    .replace(R.id.fragment_container, ReposFragment.newInstance(mUser.getLogin(), clientId, clientSecret), REPOS_FRAGMENT)
                     .commit();
         } else {
             getSupportFragmentManager()
@@ -103,11 +106,12 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
+
         clientId = getIntent().getStringExtra(CLIENT_ID);
         clientSecret = getIntent().getStringExtra(CLIENT_SECRET);
         setUpWevViewFragment();
 
-        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setVisibility(View.GONE);
     }

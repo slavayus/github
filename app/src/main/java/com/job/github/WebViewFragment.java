@@ -25,23 +25,26 @@ import com.job.github.model.WebViewModel;
 import com.job.github.presenter.WebViewContractView;
 import com.job.github.presenter.WebViewPresenter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class WebViewFragment extends Fragment implements WebViewContractView {
     private static final String CLIENT_ID = "CLIENT_ID";
     private static final String CLIENT_SECRET = "CLIENT_SECRET";
     private static final String TAG = "WebViewFragment";
-    private WebView mWebView;
+    @BindView(R.id.web_view) WebView mWebView;
     private String mClientId;
     private String mClientSecret;
     private OnGetToken onGetToken;
-    private ProgressBar mProgressBar;
+    @BindView(R.id.progressBar) ProgressBar mProgressBar;
     private WebViewPresenter mPresenter;
     private ProgressDialog mDialog;
-
+    private Unbinder bind;
 
     public interface OnGetToken {
         void onGetToken(String token);
     }
-
 
 
     @Override
@@ -111,8 +114,8 @@ public class WebViewFragment extends Fragment implements WebViewContractView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_web_view, container, false);
-        mWebView = view.findViewById(R.id.web_view);
-        mProgressBar = view.findViewById(R.id.progressBar);
+
+        bind = ButterKnife.bind(this, view);
 
         WebViewContractModel webViewModel = new WebViewModel();
         mPresenter = new WebViewPresenter(webViewModel);
@@ -120,6 +123,12 @@ public class WebViewFragment extends Fragment implements WebViewContractView {
         mPresenter.viewIsReady();
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bind.unbind();
     }
 
     @Override
