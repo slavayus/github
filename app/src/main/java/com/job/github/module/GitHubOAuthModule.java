@@ -1,7 +1,8 @@
 package com.job.github.module;
 
+import com.job.github.annotation.GitHubOAuthService;
 import com.job.github.annotation.OAuthRetrofit;
-import com.job.github.api.GitHubOAuthApi;
+import com.job.github.api.GitHubApi;
 import com.job.github.api.URLHelper;
 
 import javax.inject.Singleton;
@@ -19,9 +20,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class GitHubOAuthModule {
 
     @Singleton
+    @GitHubOAuthService
     @Provides
-    GitHubOAuthApi gitHubApi(@OAuthRetrofit Retrofit retrofit) {
-        return retrofit.create(GitHubOAuthApi.class);
+    GitHubApi gitHubApi(@OAuthRetrofit Retrofit retrofit) {
+        return retrofit.create(GitHubApi.class);
     }
 
     @Singleton

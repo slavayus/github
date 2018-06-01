@@ -1,6 +1,7 @@
 package com.job.github.module;
 
 import com.job.github.annotation.ApiRetrofit;
+import com.job.github.annotation.GitHubService;
 import com.job.github.api.GitHubApi;
 import com.job.github.api.URLHelper;
 
@@ -19,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class GitHubModule {
 
     @Singleton
+    @GitHubService
     @Provides
     GitHubApi gitHubApi(@ApiRetrofit Retrofit retrofit) {
         return retrofit.create(GitHubApi.class);
