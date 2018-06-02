@@ -20,11 +20,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.job.github.model.HomeContractModel;
-import com.job.github.model.HomeModel;
+import com.job.github.component.DaggerHomePresenterComponent;
 import com.job.github.pojo.User;
 import com.job.github.presenter.HomeContractView;
 import com.job.github.presenter.HomePresenter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +46,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
     @BindView(R.id.user_location) TextView userLocation;
     @BindView(R.id.user_blog) TextView userBlog;
     @BindView(R.id.user_email) TextView userEmail;
-    private HomePresenter mPresenter;
+    @Inject HomePresenter mPresenter;
     private Unbinder bind;
 
     public interface OnUserGet {
@@ -115,8 +116,10 @@ public class HomeFragment extends Fragment implements HomeContractView {
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
         bind = ButterKnife.bind(this, view);
 
-        HomeContractModel homeModel = new HomeModel();
-        mPresenter = new HomePresenter(homeModel);
+        DaggerHomePresenterComponent
+                .create()
+                .injectHomeFragment(this);
+
         mPresenter.attachView(this);
         mPresenter.viewIsReady();
         Log.d(TAG, "onCreateView: ");
