@@ -3,7 +3,7 @@ package com.job.github.model;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.job.github.api.App;
+import com.job.github.api.GitHubApi;
 import com.job.github.pojo.User;
 
 import okhttp3.ResponseBody;
@@ -13,9 +13,15 @@ import retrofit2.Response;
 
 
 public class HomeModel implements HomeContractModel {
+    private final GitHubApi gitHubApi;
+
+    public HomeModel(GitHubApi gitHubApi) {
+        this.gitHubApi = gitHubApi;
+    }
+
     @Override
     public void loadUser(String token, final OnLoadUser onLoadUser) {
-        App.getGitHubApi().getUser(token).enqueue(new Callback<User>() {
+        gitHubApi.getUser(token).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.body() == null) {
@@ -35,7 +41,7 @@ public class HomeModel implements HomeContractModel {
 
     @Override
     public void loadAvatar(String avatarUrl, final OnDownloadAvatar onDownloadAvatar) {
-        App.getGitHubApi().loadAvatar(avatarUrl).enqueue(new Callback<ResponseBody>() {
+        gitHubApi.loadAvatar(avatarUrl).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
@@ -57,11 +63,11 @@ public class HomeModel implements HomeContractModel {
 
     @Override
     public void updateUserInfo(User user, String token, UpdateUserInfo updateUserInfo) {
-        App.getGitHubApi().updateBio(token, user).enqueue(new Callback<User>() {
+        gitHubApi.updateBio(token, user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    if (response.body()!=null) {
+                    if (response.body() != null) {
                         updateUserInfo.onSuccess(response.body());
                         return;
                     }

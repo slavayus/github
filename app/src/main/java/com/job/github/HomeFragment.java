@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.job.github.model.HomeContractModel;
-import com.job.github.model.HomeModel;
+import com.job.github.component.DaggerHomePresenterComponent;
 import com.job.github.pojo.User;
 import com.job.github.presenter.HomeContractView;
 import com.job.github.presenter.HomePresenter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +46,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
     @BindView(R.id.user_location) TextView userLocation;
     @BindView(R.id.user_blog) TextView userBlog;
     @BindView(R.id.user_email) TextView userEmail;
-    private HomePresenter mPresenter;
+    @Inject HomePresenter mPresenter;
     private Unbinder bind;
 
     public interface OnUserGet {
@@ -65,6 +67,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadTokenFromArguments();
+        Log.d(TAG, "onCreate: ");
     }
 
     @Override
@@ -113,11 +116,13 @@ public class HomeFragment extends Fragment implements HomeContractView {
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
         bind = ButterKnife.bind(this, view);
 
-        HomeContractModel homeModel = new HomeModel();
-        mPresenter = new HomePresenter(homeModel);
+        DaggerHomePresenterComponent
+                .create()
+                .injectHomeFragment(this);
+
         mPresenter.attachView(this);
         mPresenter.viewIsReady();
-
+        Log.d(TAG, "onCreateView: ");
         return view;
     }
 
@@ -145,7 +150,9 @@ public class HomeFragment extends Fragment implements HomeContractView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mPresenter.destroyView();
         bind.unbind();
+        Log.d(TAG, "onDestroyView: ");
     }
 
     @Override

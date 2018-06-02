@@ -12,15 +12,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.job.github.model.ReposContractModel;
-import com.job.github.model.ReposModel;
+import com.job.github.adapter.ReposAdapter;
+import com.job.github.component.DaggerReposFragmentComponent;
+import com.job.github.component.DaggerReposPresenterComponent;
 import com.job.github.pojo.Repos;
 import com.job.github.presenter.ReposContractView;
 import com.job.github.presenter.ReposPresenter;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,9 +37,10 @@ public class ReposFragment extends Fragment implements ReposContractView {
     private String mUserLogin;
     private String mClientId;
     private String mClientSecret;
-    private ReposPresenter mPresenter;
     private LoaderFragment loaderFragment;
     private Unbinder bind;
+    @Inject ReposPresenter mPresenter;
+    @Inject ReposAdapter mReposAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,11 +67,15 @@ public class ReposFragment extends Fragment implements ReposContractView {
 
         bind = ButterKnife.bind(this, view);
 
+        DaggerReposFragmentComponent
+                .builder()
+                .reposPresenterComponent(DaggerReposPresenterComponent.create())
+                .build()
+                .injectReposFragment(this);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mReposAdapter);
 
-
-        ReposContractModel reposModel = new ReposModel();
-        mPresenter = new ReposPresenter(reposModel);
         mPresenter.attachView(this);
         mPresenter.viewIsReady();
 
@@ -78,12 +85,13 @@ public class ReposFragment extends Fragment implements ReposContractView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mPresenter.destroyView();
         bind.unbind();
     }
 
     @Override
     public void showRepos(List<Repos> data) {
-        mRecyclerView.setAdapter(new ReposFragment.ReposAdapter(data));
+        mReposAdapter.setData(data);
     }
 
     @Override
@@ -141,74 +149,6 @@ public class ReposFragment extends Fragment implements ReposContractView {
                 .commit();
 
     }
-
-    private class ReposAdapter extends RecyclerView.Adapter<ReposHolder> {
-        private List<Repos> mData;
-
-        ReposAdapter(List<Repos> data) {
-            this.mData = data;
-        }
-
-        @NonNull
-        @Override
-        public ReposHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.list_item_repo, parent, false);
-            return new ReposHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ReposHolder holder, int position) {
-            holder.bind(mData.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mData.size();
-        }
-    }
-
-    class ReposHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.repo_name) TextView mRepoName;
-        @BindView(R.id.repo_description) TextView mRepoDescription;
-        @BindView(R.id.repo_language) TextView mRepoLanguage;
-        @BindView(R.id.repo_license) TextView mRepoLicense;
-        @BindView(R.id.repo_stars) TextView mRepoStars;
-
-        ReposHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
-        void bind(Repos repos) {
-            mRepoName.setText(repos.getName());
-
-            if (repos.getDescription() == null) {
-                mRepoDescription.setVisibility(View.GONE);
-            } else {
-                mRepoDescription.setVisibility(View.VISIBLE);
-                mRepoDescription.setText(repos.getDescription());
-            }
-
-            mRepoLanguage.setText(repos.getLanguage());
-            mRepoLanguage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_language_color_shape, 0, 0, 0);
-
-            if (repos.getStargazersCount() == 0) {
-                mRepoStars.setVisibility(View.GONE);
-            } else {
-                mRepoStars.setVisibility(View.VISIBLE);
-                mRepoStars.setText(String.valueOf(repos.getStargazersCount()));
-            }
-
-            if (repos.getLicense() == null) {
-                mRepoLicense.setVisibility(View.GONE);
-            } else {
-                mRepoLicense.setVisibility(View.VISIBLE);
-                mRepoLicense.setText(repos.getLicense().getName());
-            }
-        }
-    }
-
 
     public static ReposFragment newInstance(String name, String clientId, String clientSecret) {
         Bundle bundle = new Bundle();

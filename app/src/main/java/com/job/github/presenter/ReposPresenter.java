@@ -16,9 +16,8 @@ public class ReposPresenter {
     }
 
     public void viewIsReady() {
-        ReposContractView savedView = view.get();
-        if (savedView != null) {
-            savedView.showLoaderFragment();
+        if (viewIsValid()) {
+            view.get().showLoaderFragment();
             downloadRepos();
         }
     }
@@ -28,25 +27,34 @@ public class ReposPresenter {
     }
 
     private void downloadRepos() {
-        ReposContractView savedView = view.get();
-        if (savedView == null) {
+        if (!viewIsValid()) {
             return;
         }
-        String mUserLogin = savedView.getUserLogin();
-        String mClientId = savedView.getClientId();
-        String mClientSecret = savedView.getClientSecret();
 
-        model.loadRepos(mUserLogin, mClientId, mClientSecret, new ReposContractModel.OnLoadRepos() {
+        model.loadRepos(view.get().getUserLogin(), view.get().getClientId(), view.get().getClientSecret(), new ReposContractModel.OnLoadRepos() {
             @Override
             public void onSuccess(List<Repos> data) {
-                savedView.stopLoaderFragment();
-                savedView.showRepos(data);
+                if (!viewIsValid()) {
+                    return;
+                }
+                view.get().stopLoaderFragment();
+                view.get().showRepos(data);
             }
 
             @Override
             public void onError() {
-                savedView.showLoadReposError();
+                if (viewIsValid()) {
+                    view.get().showLoadReposError();
+                }
             }
         });
+    }
+
+    private boolean viewIsValid() {
+        return view.get() != null;
+    }
+
+    public void destroyView() {
+        view.clear();
     }
 }

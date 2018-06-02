@@ -1,6 +1,6 @@
 package com.job.github.model;
 
-import com.job.github.api.App;
+import com.job.github.api.GitHubApi;
 import com.job.github.pojo.Token;
 import com.job.github.presenter.WebViewContractView;
 
@@ -14,9 +14,15 @@ import retrofit2.Response;
 
 public class WebViewModel implements WebViewContractModel {
 
+    private final GitHubApi gitHubApi;
+
+    public WebViewModel(GitHubApi gitHubApi) {
+        this.gitHubApi = gitHubApi;
+    }
+
     @Override
     public void authenticate(String clientId, String clientSecret, String url, final WebViewContractView.OnAuthenticate onAuthenticate) {
-        App.getRegisterApi().getToken(clientId, clientSecret, url).enqueue(new Callback<Token>() {
+        gitHubApi.getToken(clientId, clientSecret, url).enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful()) {

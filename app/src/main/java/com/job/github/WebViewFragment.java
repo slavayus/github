@@ -20,10 +20,11 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.job.github.api.URLHelper;
-import com.job.github.model.WebViewContractModel;
-import com.job.github.model.WebViewModel;
+import com.job.github.component.DaggerWebViewFragmentComponent;
 import com.job.github.presenter.WebViewContractView;
 import com.job.github.presenter.WebViewPresenter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +39,7 @@ public class WebViewFragment extends Fragment implements WebViewContractView {
     private String mClientSecret;
     private OnGetToken onGetToken;
     @BindView(R.id.progressBar) ProgressBar mProgressBar;
-    private WebViewPresenter mPresenter;
+    @Inject WebViewPresenter mPresenter;
     private ProgressDialog mDialog;
     private Unbinder bind;
 
@@ -117,8 +118,10 @@ public class WebViewFragment extends Fragment implements WebViewContractView {
 
         bind = ButterKnife.bind(this, view);
 
-        WebViewContractModel webViewModel = new WebViewModel();
-        mPresenter = new WebViewPresenter(webViewModel);
+        DaggerWebViewFragmentComponent
+                .create()
+                .injectWebViewFragment(this);
+
         mPresenter.attachView(this);
         mPresenter.viewIsReady();
 
@@ -128,6 +131,7 @@ public class WebViewFragment extends Fragment implements WebViewContractView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mPresenter.destroyView();
         bind.unbind();
     }
 
