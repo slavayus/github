@@ -128,6 +128,7 @@ public class WebViewFragment extends Fragment implements WebViewContractView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mPresenter.destroyView();
         bind.unbind();
     }
 

@@ -24,33 +24,46 @@ public class WebViewPresenter {
     }
 
     public void resume(String clientId) {
-        WebViewContractView savedView = view.get();
-        if (savedView != null) {
-            savedView.loadUrl(URLHelper.REGISTER_BASE_URL + URLHelper.AUTHORIZE_URL + "?client_id=" + clientId + "&redirect_uri=" + URLHelper.REDIRECT_URL+"&scope=user,public_repo");
+        if (viewIsValid()) {
+            view.get().loadUrl(URLHelper.REGISTER_BASE_URL + URLHelper.AUTHORIZE_URL + "?client_id=" + clientId + "&redirect_uri=" + URLHelper.REDIRECT_URL + "&scope=user,public_repo");
         }
     }
 
+    private boolean viewIsValid() {
+        return view.get() != null;
+    }
+
     public void authenticate(String clientId, String clientSecret, String url) {
-        final WebViewContractView savedView = view.get();
-        if (savedView == null) {
+        if (!viewIsValid()) {
             return;
         }
-        savedView.showProgressDialog();
+        view.get().showProgressDialog();
 
         model.authenticate(clientId, clientSecret, url, new WebViewContractView.OnAuthenticate() {
 
             @Override
             public void onSuccess(Token token) {
-                savedView.dismissDialog();
-                savedView.onGetToken(token.getAccessToken());
+                if (viewIsValid()) {
+                    view.get().dismissDialog();
+                    view.get().onGetToken(token.getAccessToken());
+                }
             }
 
             @Override
             public void onFailure() {
-                savedView.dismissDialog();
-                savedView.showErrorDialog();
+                if (viewIsValid()) {
+                    view.get().dismissDialog();
+                    view.get().showErrorDialog();
+                }
             }
         });
 
+    }
+
+    public void destroyView() {
+        if (viewIsValid()) {
+            view.get().dismissDialog();
+            view.clear();
+        }
     }
 }

@@ -85,6 +85,7 @@ public class ReposFragment extends Fragment implements ReposContractView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mPresenter.destroyView();
         bind.unbind();
     }
 

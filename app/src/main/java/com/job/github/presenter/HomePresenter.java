@@ -27,36 +27,46 @@ public class HomePresenter {
     }
 
     private void downloadUser() {
-        final HomeContractView savedView = this.view.get();
-        savedView.showProgressDialog();
-        String token = savedView.getToken();
-        model.loadUser(token, new HomeContractModel.OnLoadUser() {
+        if (!viewIsValid()) {
+            return;
+        }
+        view.get().showProgressDialog();
+        model.loadUser(view.get().getToken(), new HomeContractModel.OnLoadUser() {
 
             @Override
             public void onSuccess(User data) {
-                savedView.updateToolbarText(data.getName(), data.getLogin());
-                savedView.updateUserInfo(data);
-                savedView.onUserGet(data);
-                savedView.stopProgressDialog();
-                downloadAvatar(data.getAvatarUrl());
+                if (viewIsValid()) {
+                    view.get().updateToolbarText(data.getName(), data.getLogin());
+                    view.get().updateUserInfo(data);
+                    view.get().onUserGet(data);
+                    view.get().stopProgressDialog();
+                    downloadAvatar(data.getAvatarUrl());
+                }
             }
 
             @Override
             public void onError() {
-                savedView.showErrorDialog();
+                if (viewIsValid()) {
+                    view.get().showErrorDialog();
+                }
             }
         });
     }
 
+    private boolean viewIsValid() {
+        return view.get() != null;
+    }
+
     private void downloadAvatar(String avatarUrl) {
-        final HomeContractView savedView = view.get();
-        if (savedView == null) {
+        if (!viewIsValid()) {
             return;
         }
         model.loadAvatar(avatarUrl, new HomeContractModel.OnDownloadAvatar() {
             @Override
             public void onSuccess(Bitmap image) {
-                savedView.showUserAvatar(image);
+                if (viewIsValid()) {
+                    view.get().showUserAvatar(image);
+                }
             }
 
             @Override
@@ -68,54 +78,53 @@ public class HomePresenter {
 
     // TODO: 5/31/18 save user in model and get the url from the stored user
     public void userBlogButtonClick() {
-        HomeContractView storedView = view.get();
-        if (storedView == null) {
-            return;
+        if (viewIsValid()) {
+            view.get().openBrowser();
+            Log.d(TAG, "userBlogButtonClick: ");
         }
-        storedView.openBrowser();
-        Log.d(TAG, "userBlogButtonClick: ");
     }
 
     public void userEmailButtonClick() {
-        HomeContractView storedView = view.get();
-        if (storedView == null) {
-            return;
+        if (viewIsValid()) {
+            view.get().openMail();
+            Log.d(TAG, "userEmailButtonClick: ");
         }
-        storedView.openMail();
-        Log.d(TAG, "userEmailButtonClick: ");
     }
 
     public void userBioButtonClick() {
-        HomeContractView storedView = view.get();
-        if (storedView != null) {
-            storedView.openEditBioDialog();
+        if (viewIsValid()) {
+            view.get().openEditBioDialog();
         }
     }
 
     public void newBio(String text) {
-        HomeContractView storedView = view.get();
-        if (storedView == null) {
+        if (!viewIsValid()) {
             return;
         }
         User user = new User();
         user.setBio(text);
-        model.updateUserInfo(user, storedView.getToken(), new HomeContractModel.UpdateUserInfo() {
+        model.updateUserInfo(user, view.get().getToken(), new HomeContractModel.UpdateUserInfo() {
 
             @Override
             public void onSuccess(User user) {
-                HomeContractView savedView = view.get();
-                if (savedView != null) {
-                    savedView.updateUserInfo(user);
+                if (viewIsValid()) {
+                    view.get().updateUserInfo(user);
                 }
             }
 
             @Override
             public void onError() {
-                HomeContractView savedView = view.get();
-                if (savedView != null) {
-                    savedView.showErrorUpdateUserInfoDialog();
+                if (viewIsValid()) {
+                    view.get().showErrorUpdateUserInfoDialog();
                 }
             }
         });
+    }
+
+    public void destroyView() {
+        if (viewIsValid()) {
+            view.get().stopProgressDialog();
+            view.clear();
+        }
     }
 }
