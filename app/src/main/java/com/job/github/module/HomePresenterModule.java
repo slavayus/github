@@ -1,5 +1,7 @@
 package com.job.github.module;
 
+import com.job.github.annotation.GitHubService;
+import com.job.github.api.GitHubApi;
 import com.job.github.model.HomeContractModel;
 import com.job.github.model.HomeModel;
 import com.job.github.presenter.HomePresenter;
@@ -13,7 +15,7 @@ import dagger.Provides;
  * Created by slavik on 6/2/18.
  */
 
-@Module
+@Module(includes = {GitHubModule.class})
 public class HomePresenterModule {
 
     @Provides
@@ -24,8 +26,8 @@ public class HomePresenterModule {
 
     @Provides
     @Singleton
-    HomeContractModel homeModel() {
-        return new HomeModel();
+    HomeContractModel homeModel(@GitHubService GitHubApi gitHubApi) {
+        return new HomeModel(gitHubApi);
     }
 
 }

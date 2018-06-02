@@ -1,5 +1,7 @@
 package com.job.github.module;
 
+import com.job.github.annotation.GitHubService;
+import com.job.github.api.GitHubApi;
 import com.job.github.model.ReposContractModel;
 import com.job.github.model.ReposModel;
 import com.job.github.presenter.ReposPresenter;
@@ -13,7 +15,7 @@ import dagger.Provides;
  * Created by slavik on 6/2/18.
  */
 
-@Module
+@Module(includes = {GitHubModule.class})
 public class ReposPresenterModule {
 
     @Provides
@@ -24,7 +26,7 @@ public class ReposPresenterModule {
 
     @Provides
     @Singleton
-    ReposContractModel reposContractModel() {
-        return new ReposModel();
+    ReposContractModel reposContractModel(@GitHubService GitHubApi gitHubApi) {
+        return new ReposModel(gitHubApi);
     }
 }
