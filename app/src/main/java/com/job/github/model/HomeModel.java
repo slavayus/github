@@ -2,8 +2,10 @@ package com.job.github.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 
 import com.job.github.api.GitHubApi;
+import com.job.github.database.AppDatabase;
 import com.job.github.pojo.User;
 
 import okhttp3.ResponseBody;
@@ -14,13 +16,18 @@ import retrofit2.Response;
 
 public class HomeModel implements HomeContractModel {
     private final GitHubApi gitHubApi;
+    private final AppDatabase database;
 
-    public HomeModel(GitHubApi gitHubApi) {
+    public HomeModel(GitHubApi gitHubApi, AppDatabase database) {
         this.gitHubApi = gitHubApi;
+        this.database = database;
     }
 
     @Override
     public void loadUser(String token, final OnLoadUser onLoadUser) {
+
+        readUserFromDbAsync(onLoadUser);
+
         gitHubApi.getUser(token).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -28,6 +35,7 @@ public class HomeModel implements HomeContractModel {
                     onLoadUser.onError();
                 } else {
                     onLoadUser.onSuccess(response.body());
+                    saveInDbUserAsync(response.body());
                 }
             }
 
@@ -38,6 +46,42 @@ public class HomeModel implements HomeContractModel {
         });
 
     }
+
+    private void saveInDbUserAsync(User user) {
+        new Thread() {
+            @Override
+            public void run() {
+                database.userDao().insert(user);
+            }
+        }.start();
+    }
+
+    private void readUserFromDbAsync(OnLoadUser onLoadUser) {
+        new ReadAsyncTask(database, onLoadUser).execute();
+    }
+
+    private static final class ReadAsyncTask extends AsyncTask<Void, Void, User> {
+        private final AppDatabase appDatabase;
+        private final OnLoadUser onLoadUser;
+
+        ReadAsyncTask(AppDatabase appDatabase, OnLoadUser onLoadUser) {
+            this.appDatabase = appDatabase;
+            this.onLoadUser = onLoadUser;
+        }
+
+        @Override
+        protected User doInBackground(Void... voids) {
+            return appDatabase.userDao().getUser();
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            if (user != null) {
+                onLoadUser.onSuccess(user);
+            }
+        }
+    }
+
 
     @Override
     public void loadAvatar(String avatarUrl, final OnDownloadAvatar onDownloadAvatar) {

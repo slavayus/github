@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.job.github.component.DaggerHomePresenterComponent;
+import com.job.github.module.ApplicationContextModule;
 import com.job.github.pojo.User;
 import com.job.github.presenter.HomeContractView;
 import com.job.github.presenter.HomePresenter;
@@ -117,7 +118,9 @@ public class HomeFragment extends Fragment implements HomeContractView {
         bind = ButterKnife.bind(this, view);
 
         DaggerHomePresenterComponent
-                .create()
+                .builder()
+                .applicationContextModule(new ApplicationContextModule(getContext()))
+                .build()
                 .injectHomeFragment(this);
 
         mPresenter.attachView(this);

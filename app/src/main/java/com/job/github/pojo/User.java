@@ -1,18 +1,22 @@
 package com.job.github.pojo;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.net.URL;
 import java.util.Date;
 
+@Entity
 public class User {
-
     @SerializedName("login")
     @Expose
     private String login;
     @SerializedName("id")
     @Expose
+    @PrimaryKey
     private Integer id;
     @SerializedName("avatar_url")
     @Expose
