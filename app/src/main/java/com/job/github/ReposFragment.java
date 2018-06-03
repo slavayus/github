@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.job.github.adapter.ReposAdapter;
 import com.job.github.component.DaggerReposFragmentComponent;
 import com.job.github.component.DaggerReposPresenterComponent;
+import com.job.github.module.ApplicationContextModule;
 import com.job.github.pojo.Repos;
 import com.job.github.presenter.ReposContractView;
 import com.job.github.presenter.ReposPresenter;
@@ -69,7 +70,12 @@ public class ReposFragment extends Fragment implements ReposContractView {
 
         DaggerReposFragmentComponent
                 .builder()
-                .reposPresenterComponent(DaggerReposPresenterComponent.create())
+                .reposPresenterComponent(
+                        DaggerReposPresenterComponent
+                                .builder()
+                                .applicationContextModule(new ApplicationContextModule(getContext()))
+                                .build()
+                )
                 .build()
                 .injectReposFragment(this);
 

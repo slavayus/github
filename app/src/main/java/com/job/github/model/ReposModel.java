@@ -1,6 +1,7 @@
 package com.job.github.model;
 
 import com.job.github.api.GitHubApi;
+import com.job.github.database.AppDatabase;
 import com.job.github.pojo.Repos;
 
 import java.util.List;
@@ -12,9 +13,11 @@ import retrofit2.Response;
 public class ReposModel implements ReposContractModel {
 
     private final GitHubApi gitHubApi;
+    private final AppDatabase appDatabase;
 
-    public ReposModel(GitHubApi gitHubApi) {
+    public ReposModel(GitHubApi gitHubApi, AppDatabase appDatabase) {
         this.gitHubApi = gitHubApi;
+        this.appDatabase = appDatabase;
     }
 
     @Override

@@ -1,10 +1,19 @@
 
 package com.job.github.pojo;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Repos {
+    @PrimaryKey
+    @NonNull
+    private String id;
     @SerializedName("name")
     @Expose
     private String name;
@@ -22,6 +31,7 @@ public class Repos {
     private String updatedAt;
     @SerializedName("license")
     @Expose
+    @Ignore
     private License license;
     @SerializedName("stargazers_count")
     @Expose
@@ -83,4 +93,11 @@ public class Repos {
         this.license = license;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }
