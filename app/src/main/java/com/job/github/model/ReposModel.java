@@ -24,8 +24,11 @@ public class ReposModel implements ReposContractModel {
     }
 
     @Override
-    public void loadRepos(String mUserLogin, String mClientId, String mClientSecret, final OnLoadRepos onLoadRepos) {
-        readReposFromDbAsync(onLoadRepos);
+    public void loadRepos(String mUserLogin, String mClientId, String mClientSecret, boolean isThereNetwork, final OnLoadRepos onLoadRepos) {
+        if (!isThereNetwork) {
+            readReposFromDbAsync(onLoadRepos);
+            return;
+        }
 
         gitHubApi.getRepos(mUserLogin, mClientId, mClientSecret).enqueue(new Callback<List<Repos>>() {
             @Override
