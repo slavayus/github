@@ -5,7 +5,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
-import com.job.github.pojo.Repos;
+import com.job.github.api.pojo.Repos;
 
 import java.util.List;
 

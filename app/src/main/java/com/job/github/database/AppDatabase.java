@@ -4,10 +4,10 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 
-import com.job.github.convertor.DateConverter;
-import com.job.github.convertor.UrlConverter;
-import com.job.github.pojo.Repos;
-import com.job.github.pojo.User;
+import com.job.github.api.pojo.Repos;
+import com.job.github.api.pojo.User;
+import com.job.github.database.convertor.DateConverter;
+import com.job.github.database.convertor.UrlConverter;
 
 /**
  * Created by slavik on 6/3/18.
