@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity
 public class Repos {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int id;
     @SerializedName("name")
     @Expose
@@ -34,6 +34,9 @@ public class Repos {
     @SerializedName("stargazers_count")
     @Expose
     private Integer stargazersCount;
+    @SerializedName("pushed_at")
+    @Expose
+    private String pushedAt;
 
     public Integer getStargazersCount() {
         return stargazersCount;
@@ -97,5 +100,13 @@ public class Repos {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getPushedAt() {
+        return pushedAt;
+    }
+
+    public void setPushedAt(String pushedAt) {
+        this.pushedAt = pushedAt;
     }
 }

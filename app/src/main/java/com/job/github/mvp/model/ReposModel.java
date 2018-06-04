@@ -25,10 +25,7 @@ public class ReposModel implements ReposContractModel {
 
     @Override
     public void loadRepos(String mUserLogin, String mClientId, String mClientSecret, boolean isThereNetwork, final OnLoadRepos onLoadRepos) {
-        if (!isThereNetwork) {
-            readReposFromDbAsync(onLoadRepos);
-            return;
-        }
+        readReposFromDbAsync(onLoadRepos);
 
         gitHubApi.getRepos(mUserLogin, mClientId, mClientSecret).enqueue(new Callback<List<Repos>>() {
             @Override
@@ -61,7 +58,9 @@ public class ReposModel implements ReposContractModel {
 
         @Override
         protected List<Repos> doInBackground(Void... voids) {
-            return appDatabase.reposDao().getAll();
+            List<Repos> repos = appDatabase.reposDao().getAll();
+            appDatabase.close();
+            return repos;
         }
 
         @Override
@@ -80,6 +79,7 @@ public class ReposModel implements ReposContractModel {
             @Override
             public void run() {
                 appDatabase.reposDao().insertAll(body);
+                appDatabase.close();
             }
         }.start();
     }

@@ -52,6 +52,7 @@ public class HomeModel implements HomeContractModel {
             @Override
             public void run() {
                 database.userDao().insert(user);
+                database.close();
             }
         }.start();
     }
@@ -71,7 +72,9 @@ public class HomeModel implements HomeContractModel {
 
         @Override
         protected User doInBackground(Void... voids) {
-            return appDatabase.userDao().getUser();
+            User user = appDatabase.userDao().getUser();
+            appDatabase.close();
+            return user;
         }
 
         @Override

@@ -18,6 +18,6 @@ public interface ReposDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Repos> repos);
 
-    @Query("SELECT * FROM repos")
+    @Query("SELECT * FROM repos ORDER BY  pushedAt DESC")
     List<Repos> getAll();
 }
