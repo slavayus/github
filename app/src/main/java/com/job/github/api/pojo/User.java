@@ -2,6 +2,8 @@ package com.job.github.api.pojo;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -10,7 +12,7 @@ import java.net.URL;
 import java.util.Date;
 
 @Entity
-public class User {
+public class User implements Parcelable {
     @SerializedName("login")
     @Expose
     private String login;
@@ -60,6 +62,60 @@ public class User {
     @SerializedName("updated_at")
     @Expose
     private Date updatedAt;
+
+    public User() {
+    }
+
+    protected User(Parcel in) {
+        login = in.readString();
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        name = in.readString();
+        company = in.readString();
+        blog = in.readString();
+        location = in.readString();
+        email = in.readString();
+        bio = in.readString();
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(login);
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(name);
+        dest.writeString(company);
+        dest.writeString(blog);
+        dest.writeString(location);
+        dest.writeString(email);
+        dest.writeString(bio);
+    }
+
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getLogin() {
         return login;

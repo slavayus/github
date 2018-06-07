@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
     @BindView(R.id.user_email) TextView userEmail;
     @Inject HomePresenter mPresenter;
     private Unbinder bind;
+    private User user;
 
     public interface OnUserGet {
         void onUserGet(User user);
@@ -96,6 +97,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
     @Override
     public void onUserGet(User data) {
         mOnUserGetListener.onUserGet(data);
+        this.user = data;
     }
 
     @Override
@@ -133,7 +135,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
 
     @OnClick(R.id.fab)
     void fabClick() {
-        startActivity(new Intent(HomeFragment.this.getContext(), EditUserInfoActivity.class));
+        startActivity(EditUserInfoActivity.newInstance(getContext(), user));
     }
 
     @OnClick({R.id.user_bio, R.id.user_email, R.id.user_blog})
