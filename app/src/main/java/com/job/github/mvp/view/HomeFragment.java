@@ -147,7 +147,8 @@ public class HomeFragment extends Fragment implements HomeContractView {
         switch (requestCode) {
             case EDIT_USER_INFO:
                 if (resultCode == Activity.RESULT_OK) {
-                    updateUserInfo(data.getParcelableExtra(USER));
+                    user = data.getParcelableExtra(USER);
+                    updateUserInfo(user);
                 }
                 break;
         }

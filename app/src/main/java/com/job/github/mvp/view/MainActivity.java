@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -42,14 +43,14 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
                     } else {
                         return false;
                     }
-                case R.id.navigation_dashboard:
+                case R.id.navigation_repos:
                     if (mUser != null) {
                         setUpReposFragment();
                         return true;
                     } else {
                         return false;
                     }
-                case R.id.navigation_notifications:
+                case R.id.navigation_stars:
 
                     return true;
             }
@@ -108,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        Log.d(TAG, "onCreate: ");
 
         clientId = getIntent().getStringExtra(CLIENT_ID);
         clientSecret = getIntent().getStringExtra(CLIENT_SECRET);

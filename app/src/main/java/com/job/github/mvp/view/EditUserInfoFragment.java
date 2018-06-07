@@ -67,7 +67,7 @@ public class EditUserInfoFragment extends Fragment implements EditUserInfoContra
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_edit_user_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_user_info, container, false);
         mBind = ButterKnife.bind(this, view);
 
         DaggerEditUserInfoComponent

@@ -19,8 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".mvp.view.MainActivity" />
-        <activity android:name=".mvp.view.EditUserInfoActivity"/>
+        <activity
+            android:name=".mvp.view.MainActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".mvp.view.EditUserInfoActivity"
+            android:parentActivityName=".mvp.view.MainActivity" />
     </application>
 
 </manifest>

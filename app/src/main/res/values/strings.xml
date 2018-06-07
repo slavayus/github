@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">GitHub</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Overview</string>
+    <string name="title_dashboard">Repositories</string>
+    <string name="title_stars">Stars</string>
     <string name="authentication">Authentication</string>
     <string name="user_avatar">user avatar</string>
     <string name="user_home_dialog_error_title">Error</string>
