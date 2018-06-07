@@ -1,5 +1,6 @@
 package com.job.github.mvp.view;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +38,8 @@ import butterknife.Unbinder;
 public class HomeFragment extends Fragment implements HomeContractView {
     private static final String TAG = "HomeFragment";
     private static final String TOKEN = "token";
+    private static final int EDIT_USER_INFO = 0;
+    private static final String USER = "USER";
     private String mToken;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.user_avatar) ImageView mUserAvatar;
@@ -135,7 +138,19 @@ public class HomeFragment extends Fragment implements HomeContractView {
 
     @OnClick(R.id.fab)
     void fabClick() {
-        startActivity(EditUserInfoActivity.newInstance(getContext(), user, mToken));
+        startActivityForResult(EditUserInfoActivity.newInstance(getContext(), user, mToken), EDIT_USER_INFO);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case EDIT_USER_INFO:
+                if (resultCode == Activity.RESULT_OK) {
+                    updateUserInfo(data.getParcelableExtra(USER));
+                }
+                break;
+        }
     }
 
     @OnClick({R.id.user_bio, R.id.user_email, R.id.user_blog})

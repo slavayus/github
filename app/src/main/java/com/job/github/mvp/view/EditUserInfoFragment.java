@@ -1,6 +1,7 @@
 package com.job.github.mvp.view;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -47,6 +48,21 @@ public class EditUserInfoFragment extends Fragment implements EditUserInfoContra
     @BindView(R.id.toolbar) Toolbar mToolbar;
     private ProgressDialog dialog;
     private String mToken;
+    private OnUpdateUserInfo onUpdateUserInfo;
+
+    public interface OnUpdateUserInfo {
+        void onUpdateUserInfo(User user);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            onUpdateUserInfo = ((OnUpdateUserInfo) context);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "must implement OnUpdateUserInfo");
+        }
+    }
 
     @Nullable
     @Override
@@ -118,7 +134,7 @@ public class EditUserInfoFragment extends Fragment implements EditUserInfoContra
 
     @Override
     public void stopFragment(User user) {
-
+        onUpdateUserInfo.onUpdateUserInfo(user);
     }
 
     @Override
