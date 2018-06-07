@@ -135,7 +135,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
 
     @OnClick(R.id.fab)
     void fabClick() {
-        startActivity(EditUserInfoActivity.newInstance(getContext(), user));
+        startActivity(EditUserInfoActivity.newInstance(getContext(), user, mToken));
     }
 
     @OnClick({R.id.user_bio, R.id.user_email, R.id.user_blog})

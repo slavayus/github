@@ -1,5 +1,7 @@
 package com.job.github.dagger.module;
 
+import com.job.github.api.GitHubApi;
+import com.job.github.dagger.annotation.GitHubService;
 import com.job.github.mvp.model.EditUserInfoContractModel;
 import com.job.github.mvp.model.EditUserInfoModel;
 import com.job.github.mvp.presenter.EditUserInfoPresenter;
@@ -13,7 +15,7 @@ import dagger.Provides;
  * Created by slavik on 6/7/18.
  */
 
-@Module
+@Module(includes = {GitHubModule.class})
 public class EditUserInfoModule {
     @Singleton
     @Provides
@@ -23,7 +25,7 @@ public class EditUserInfoModule {
 
     @Singleton
     @Provides
-    EditUserInfoContractModel editUserInfoContractModel() {
-        return new EditUserInfoModel();
+    EditUserInfoContractModel editUserInfoContractModel(@GitHubService GitHubApi gitHubApi) {
+        return new EditUserInfoModel(gitHubApi);
     }
 }

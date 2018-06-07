@@ -32,4 +32,7 @@ public interface GitHubApi {
 
     @PATCH("/user")
     Call<User> updateBio(@Query("access_token") String token, @Body User user);
+
+    @PATCH("/user")
+    Call<User> updateUserInfo(@Query("access_token") String token, @Body User user);
 }

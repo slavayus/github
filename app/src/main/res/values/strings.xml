@@ -10,6 +10,7 @@
     <string name="user_home_dialog_error_message">Unable to load the page.</string>
     <string name="repositories">Repositories</string>
     <string name="loading_user_data">Loading user data</string>
+    <string name="updating_user_data">Updating user data</string>
     <string name="repo_name">repo name</string>
     <string name="repo_description">repo description</string>
     <string name="repo_language">repo language</string>
@@ -33,4 +34,5 @@
     <string name="public_profile">Public profile</string>
     <string name="user_bio_message">You can @mention other users and organizations to link to them.</string>
     <string name="user_company_message">You can @mention your company’s GitHub organization to link it.</string>
+    <string name="edit_done">done</string>
 </resources>
