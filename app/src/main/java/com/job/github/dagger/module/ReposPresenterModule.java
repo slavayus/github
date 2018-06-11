@@ -6,6 +6,7 @@ import com.job.github.database.AppDatabase;
 import com.job.github.mvp.model.ReposContractModel;
 import com.job.github.mvp.model.ReposModel;
 import com.job.github.mvp.presenter.ReposPresenter;
+import com.job.github.utils.ClientPreferences;
 import com.job.github.utils.NetworkChecker;
 
 import javax.inject.Singleton;
@@ -17,13 +18,13 @@ import dagger.Provides;
  * Created by slavik on 6/2/18.
  */
 
-@Module(includes = {GitHubModule.class, AppDatabaseModule.class, NetworkCheckerModule.class})
+@Module(includes = {GitHubModule.class, AppDatabaseModule.class, NetworkCheckerModule.class, ClientPreferencesModule.class})
 public class ReposPresenterModule {
 
     @Provides
     @Singleton
-    ReposPresenter reposPresenter(ReposContractModel reposContractModel, NetworkChecker networkChecker) {
-        return new ReposPresenter(reposContractModel, networkChecker);
+    ReposPresenter reposPresenter(ReposContractModel reposContractModel, NetworkChecker networkChecker, ClientPreferences clientPreferences) {
+        return new ReposPresenter(reposContractModel, networkChecker, clientPreferences);
     }
 
     @Provides

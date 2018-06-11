@@ -6,6 +6,7 @@ import com.job.github.database.AppDatabase;
 import com.job.github.mvp.model.HomeContractModel;
 import com.job.github.mvp.model.HomeModel;
 import com.job.github.mvp.presenter.HomePresenter;
+import com.job.github.utils.ClientPreferences;
 
 import javax.inject.Singleton;
 
@@ -16,13 +17,13 @@ import dagger.Provides;
  * Created by slavik on 6/2/18.
  */
 
-@Module(includes = {GitHubModule.class, AppDatabaseModule.class})
+@Module(includes = {GitHubModule.class, AppDatabaseModule.class, ClientPreferencesModule.class})
 public class HomePresenterModule {
 
     @Provides
     @Singleton
-    HomePresenter homePresenter(HomeContractModel homeContractModel) {
-        return new HomePresenter(homeContractModel);
+    HomePresenter homePresenter(HomeContractModel homeContractModel, ClientPreferences clientPreferences) {
+        return new HomePresenter(homeContractModel, clientPreferences);
     }
 
     @Provides

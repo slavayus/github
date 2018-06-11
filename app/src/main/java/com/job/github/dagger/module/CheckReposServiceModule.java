@@ -13,7 +13,7 @@ import dagger.Provides;
  * Created by slavik on 6/11/18.
  */
 
-@Module(includes = {ApplicationContextModule.class})
+@Module(includes = {ClientPreferencesModule.class})
 public class CheckReposServiceModule {
 
     @Singleton

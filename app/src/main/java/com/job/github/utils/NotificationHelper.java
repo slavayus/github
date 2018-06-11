@@ -32,15 +32,16 @@ public class NotificationHelper extends ContextWrapper {
         }
     }
 
-    public NotificationCompat.Builder getNotificationRepos(PendingIntent pendingIntent) {
+    public NotificationCompat.Builder getNotificationRepos(PendingIntent pendingIntent, String name) {
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentTitle("Android Job Demo")
-                .setContentText("Notification from Android Job Demo App.")
+                .setContentTitle(name)
+                .setContentText(getString(R.string.repo_was_updated_message))
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setShowWhen(true)
                 .setColor(Color.RED)
                 .setAutoCancel(true)
+                .setVibrate(new long[]{0, 500})
                 .setLocalOnly(true);
     }
 

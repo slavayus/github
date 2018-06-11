@@ -1,6 +1,7 @@
 package com.job.github.dagger.component;
 
 import com.job.github.dagger.module.CheckReposServiceModule;
+import com.job.github.dagger.module.GitHubModule;
 import com.job.github.utils.CheckReposJobService;
 
 import javax.inject.Singleton;
@@ -12,7 +13,7 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {CheckReposServiceModule.class})
+@Component(modules = {CheckReposServiceModule.class, GitHubModule.class})
 public interface CheckReposServiceComponent {
     void injectReposService(CheckReposJobService service);
 }

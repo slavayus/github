@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.job.github.api.pojo.User;
 import com.job.github.mvp.model.HomeContractModel;
+import com.job.github.utils.ClientPreferences;
 
 import java.lang.ref.WeakReference;
 
@@ -12,10 +13,12 @@ import java.lang.ref.WeakReference;
 public class HomePresenter {
     private static final String TAG = "HomePresenter";
     private final HomeContractModel model;
+    private final ClientPreferences clientPreferences;
     private WeakReference<HomeContractView> view;
 
-    public HomePresenter(HomeContractModel homeModel) {
+    public HomePresenter(HomeContractModel homeModel, ClientPreferences clientPreferences) {
         this.model = homeModel;
+        this.clientPreferences = clientPreferences;
     }
 
     public void attachView(HomeContractView view) {
@@ -39,6 +42,7 @@ public class HomePresenter {
                     view.get().updateToolbarText(data.getName(), data.getLogin());
                     view.get().updateUserInfo(data);
                     view.get().onUserGet(data);
+                    clientPreferences.setUserLogin(data.getLogin());
                     view.get().stopProgressDialog();
                     downloadAvatar(data.getAvatarUrl());
                 }

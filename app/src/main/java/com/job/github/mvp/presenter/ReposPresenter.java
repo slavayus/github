@@ -2,6 +2,7 @@ package com.job.github.mvp.presenter;
 
 import com.job.github.api.pojo.Repos;
 import com.job.github.mvp.model.ReposContractModel;
+import com.job.github.utils.ClientPreferences;
 import com.job.github.utils.NetworkChecker;
 
 import java.lang.ref.WeakReference;
@@ -11,11 +12,13 @@ public class ReposPresenter {
 
     private final ReposContractModel model;
     private final NetworkChecker networkChecker;
+    private final ClientPreferences clientPreferences;
     private WeakReference<ReposContractView> view;
 
-    public ReposPresenter(ReposContractModel model, NetworkChecker networkChecker) {
+    public ReposPresenter(ReposContractModel model, NetworkChecker networkChecker, ClientPreferences clientPreferences) {
         this.model = model;
         this.networkChecker = networkChecker;
+        this.clientPreferences = clientPreferences;
     }
 
     public void viewIsReady() {
@@ -46,6 +49,9 @@ public class ReposPresenter {
                         }
                         view.get().stopLoaderFragment();
                         view.get().showRepos(data);
+                        if (data.get(0) != null) {
+                            clientPreferences.setLastRepo(data.get(0).getName());
+                        }
                     }
 
                     @Override

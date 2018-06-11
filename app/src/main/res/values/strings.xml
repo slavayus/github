@@ -36,4 +36,5 @@
     <string name="user_company_message">You can @mention your company’s GitHub organization to link it.</string>
     <string name="edit_done">done</string>
     <string name="noti_channel_repos">Repositories</string>
+    <string name="repo_was_updated_message">Was updated</string>
 </resources>

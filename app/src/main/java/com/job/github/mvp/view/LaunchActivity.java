@@ -40,10 +40,11 @@ public class LaunchActivity extends AppCompatActivity {
 
         ComponentName jobService = new ComponentName(this, CheckReposJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(LOAD_ARTWORK_JOB_ID, jobService)
+                .setExtras(CheckReposJobService.creteExtras(clientId, clientSecret))
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setRequiresCharging(false)
                 .setRequiresDeviceIdle(false)
-                .setBackoffCriteria(TimeUnit.SECONDS.toMillis(5), JobInfo.BACKOFF_POLICY_LINEAR);
+                .setBackoffCriteria(TimeUnit.HOURS.toMillis(1), JobInfo.BACKOFF_POLICY_LINEAR);
 
         JobScheduler jobScheduler =
                 (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
