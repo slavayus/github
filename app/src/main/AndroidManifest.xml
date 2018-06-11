@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.job.github">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -11,15 +13,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DarkTheme.NoActionBar">
-        <activity android:name=".LaunchActivity">
+        <activity android:name=".mvp.view.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".EditUserInfoActivity"/>
+        <activity
+            android:name=".mvp.view.MainActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".mvp.view.EditUserInfoActivity"
+            android:parentActivityName=".mvp.view.MainActivity" />
+
+        <service
+            android:name=".utils.CheckReposJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

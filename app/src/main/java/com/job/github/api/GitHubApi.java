@@ -1,8 +1,8 @@
 package com.job.github.api;
 
-import com.job.github.pojo.Repos;
-import com.job.github.pojo.Token;
-import com.job.github.pojo.User;
+import com.job.github.api.pojo.Repos;
+import com.job.github.api.pojo.Token;
+import com.job.github.api.pojo.User;
 
 import java.util.List;
 
@@ -32,4 +32,7 @@ public interface GitHubApi {
 
     @PATCH("/user")
     Call<User> updateBio(@Query("access_token") String token, @Body User user);
+
+    @PATCH("/user")
+    Call<User> updateUserInfo(@Query("access_token") String token, @Body User user);
 }
