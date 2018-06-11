@@ -25,6 +25,11 @@
         <activity
             android:name=".mvp.view.EditUserInfoActivity"
             android:parentActivityName=".mvp.view.MainActivity" />
+
+        <service
+            android:name=".utils.CheckReposJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>
