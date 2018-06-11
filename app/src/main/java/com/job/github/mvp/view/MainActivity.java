@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
     private static final String HOME_FRAGMENT = "HOME_FRAGMENT";
     private static final String REPOS_FRAGMENT = "REPOS_FRAGMENT";
     private static final String WEBVIEW_FRAGMENT = "WEBVIEW_FRAGMENT";
+    private static final String FOLLOWERS_FRAGMENT = "FOLLOWERS_FRAGMENT";
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
     private String mToken;
@@ -50,13 +51,31 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
                     } else {
                         return false;
                     }
-                case R.id.navigation_stars:
-
-                    return true;
+                case R.id.navigation_followers:
+                    if (mUser != null) {
+                        setUpFollowersFragment();
+                        return true;
+                    }
+                    return false;
             }
             return false;
         }
     };
+
+    private void setUpFollowersFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FOLLOWERS_FRAGMENT);
+        if (fragment == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, FollowersFragment.newInstance(), FOLLOWERS_FRAGMENT)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .attach(fragment)
+                    .commit();
+        }
+    }
 
     private void setUpReposFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(REPOS_FRAGMENT);
