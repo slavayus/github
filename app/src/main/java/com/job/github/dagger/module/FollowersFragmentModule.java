@@ -1,5 +1,7 @@
 package com.job.github.dagger.module;
 
+import com.job.github.api.GitHubApi;
+import com.job.github.dagger.annotation.GitHubService;
 import com.job.github.mvp.model.FollowersFragmentContractModel;
 import com.job.github.mvp.model.FollowersFragmentModel;
 import com.job.github.mvp.presenter.FollowersFragmentPresenter;
@@ -14,7 +16,7 @@ import dagger.Provides;
  * Created by slavik on 6/11/18.
  */
 
-@Module
+@Module(includes = {GitHubModule.class})
 public class FollowersFragmentModule {
 
     @Singleton
@@ -25,8 +27,8 @@ public class FollowersFragmentModule {
 
     @Singleton
     @Provides
-    FollowersFragmentContractModel model() {
-        return new FollowersFragmentModel();
+    FollowersFragmentContractModel model(@GitHubService GitHubApi api) {
+        return new FollowersFragmentModel(api);
     }
 
 

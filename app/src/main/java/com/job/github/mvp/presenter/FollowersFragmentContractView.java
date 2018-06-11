@@ -5,4 +5,5 @@ package com.job.github.mvp.presenter;
  */
 
 public interface FollowersFragmentContractView {
+    String getUserLogin();
 }

@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
         if (fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, FollowersFragment.newInstance(), FOLLOWERS_FRAGMENT)
+                    .replace(R.id.fragment_container, FollowersFragment.newInstance(mUser.getLogin()), FOLLOWERS_FRAGMENT)
                     .commit();
         } else {
             getSupportFragmentManager()

@@ -27,10 +27,27 @@ import butterknife.Unbinder;
  */
 
 public class FollowersFragment extends Fragment implements FollowersFragmentContractView {
+    public static final String USER_LOGIN = "USER_LOGIN";
     @Inject FollowersAdapter mAdapter;
     @Inject FollowersFragmentPresenter mPresenter;
     @BindView(R.id.recycler_view_fragment) RecyclerView mRecyclerView;
     private Unbinder bind;
+    private String mUserLogin;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        readFromArguments();
+    }
+
+    private void readFromArguments() {
+        Bundle arguments = getArguments();
+        if (arguments == null) {
+            throw new IllegalArgumentException("There is no user login in arguments");
+        } else {
+            mUserLogin = arguments.getString(USER_LOGIN);
+        }
+    }
 
     @Nullable
     @Override
@@ -59,7 +76,17 @@ public class FollowersFragment extends Fragment implements FollowersFragmentCont
         bind.unbind();
     }
 
-    public static Fragment newInstance() {
-        return new FollowersFragment();
+    public static Fragment newInstance(String userLogin) {
+        Bundle bundle = new Bundle();
+        bundle.putString(USER_LOGIN, userLogin);
+
+        FollowersFragment followersFragment = new FollowersFragment();
+        followersFragment.setArguments(bundle);
+        return followersFragment;
+    }
+
+    @Override
+    public String getUserLogin() {
+        return mUserLogin;
     }
 }
