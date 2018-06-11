@@ -24,28 +24,52 @@ public class FollowersFragmentModel implements FollowersFragmentContractModel {
     }
 
     @Override
-    public void downloadAllFollowers(String userLogin, OnDownloadFollowers onDownloadFollowers) {
+    public void downloadAllFollowers(String userLogin, OnDownloadFollowers onDownloadFollowersFollowers) {
 
         api.getFollowers(userLogin).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        onDownloadFollowers.onSuccess(response.body());
+                        onDownloadFollowersFollowers.onSuccess(response.body());
                         Log.d(TAG, "onResponse: success");
                         return;
                     }
                 }
                 Log.d(TAG, "onResponse: error");
-                onDownloadFollowers.onError();
+                onDownloadFollowersFollowers.onError();
             }
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
-                onDownloadFollowers.onError();
+                onDownloadFollowersFollowers.onError();
             }
         });
 
+    }
+
+    @Override
+    public void downloadUser(String login, OnDownloadUser onDownloadUser) {
+        api.getUserByLogin(login).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        onDownloadUser.onSuccess(response.body());
+                        Log.d(TAG, "onResponse: success");
+                        return;
+                    }
+                }
+                Log.d(TAG, "onResponse: error");
+                onDownloadUser.onError();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+                onDownloadUser.onError();
+            }
+        });
     }
 }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.job.github.R;
+import com.job.github.api.pojo.User;
 import com.job.github.dagger.component.DaggerFollowersFragmentComponent;
 import com.job.github.mvp.presenter.FollowersFragmentContractView;
 import com.job.github.mvp.presenter.FollowersFragmentPresenter;
@@ -88,5 +89,10 @@ public class FollowersFragment extends Fragment implements FollowersFragmentCont
     @Override
     public String getUserLogin() {
         return mUserLogin;
+    }
+
+    @Override
+    public void addNewUser(User user) {
+        mAdapter.addUser(user);
     }
 }

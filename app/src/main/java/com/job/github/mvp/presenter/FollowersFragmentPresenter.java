@@ -1,7 +1,5 @@
 package com.job.github.mvp.presenter;
 
-import android.util.Log;
-
 import com.job.github.api.pojo.User;
 import com.job.github.mvp.model.FollowersFragmentContractModel;
 
@@ -44,7 +42,25 @@ public class FollowersFragmentPresenter {
 
             @Override
             public void onSuccess(List<User> users) {
-                Log.d(TAG, "onSuccess: " + users.get(0).getLogin());
+                for (int i = 0; i < users.size(); i++) {
+                    downloadUser(users.get(i), i);
+                }
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+    }
+
+    private void downloadUser(User user, final int i) {
+        model.downloadUser(user.getLogin(), new FollowersFragmentContractModel.OnDownloadUser() {
+            @Override
+            public void onSuccess(User resultUser) {
+                if (viewIsValid()) {
+                    view.get().addNewUser(resultUser);
+                }
             }
 
             @Override

@@ -38,4 +38,7 @@ public interface GitHubApi {
 
     @GET("/users/{user_name}/followers")
     Call<List<User>> getFollowers(@Path("user_name") String userName);
+
+    @GET("/users/{user_name}")
+    Call<User> getUserByLogin(@Path("user_name") String userName);
 }
