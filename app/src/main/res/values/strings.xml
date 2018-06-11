@@ -37,4 +37,5 @@
     <string name="edit_done">done</string>
     <string name="noti_channel_repos">Repositories</string>
     <string name="repo_was_updated_message">Was updated</string>
+    <string name="user_login">login</string>
 </resources>
