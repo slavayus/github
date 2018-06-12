@@ -61,7 +61,7 @@ public class FollowersFragmentPresenter {
         if (!viewIsValid()) {
             return;
         }
-        model.downloadUser(user.getLogin(),view.get().getClientId(), view.get().getClientSecret(), new FollowersFragmentContractModel.OnDownloadUser() {
+        model.downloadUser(user.getLogin(), view.get().getClientId(), view.get().getClientSecret(), new FollowersFragmentContractModel.OnDownloadUser() {
             @Override
             public void onSuccess(User resultUser) {
                 if (viewIsValid()) {
@@ -98,5 +98,11 @@ public class FollowersFragmentPresenter {
 
     public void viewIsDestroyed() {
         view.clear();
+    }
+
+    public void itemClicked(UserWithImage userWithImage) {
+        if (viewIsValid()) {
+            view.get().followerSelected(userWithImage.getUser());
+        }
     }
 }

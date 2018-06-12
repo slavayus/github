@@ -34,8 +34,14 @@ public class FollowersFragmentModule {
 
     @Provides
     @Singleton
-    FollowersAdapter followersAdapter() {
-        return new FollowersAdapter();
+    FollowersAdapter.OnItemClickListener onItemClickListener(FollowersFragmentPresenter followersFragmentPresenter) {
+        return followersFragmentPresenter::itemClicked;
+    }
+
+    @Provides
+    @Singleton
+    FollowersAdapter followersAdapter(FollowersAdapter.OnItemClickListener listener) {
+        return new FollowersAdapter(listener);
     }
 
 }

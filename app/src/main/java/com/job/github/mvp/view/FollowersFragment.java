@@ -1,5 +1,6 @@
 package com.job.github.mvp.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.job.github.R;
+import com.job.github.api.pojo.User;
 import com.job.github.dagger.component.DaggerFollowersFragmentComponent;
 import com.job.github.mvp.presenter.FollowersFragmentContractView;
 import com.job.github.mvp.presenter.FollowersFragmentPresenter;
@@ -38,6 +40,21 @@ public class FollowersFragment extends Fragment implements FollowersFragmentCont
     private String mUserLogin;
     private String mClientId;
     private String mClientSecret;
+    private OnSelectFollower onSelectFollower;
+
+    public interface OnSelectFollower {
+        void onSelectFollower(User user);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            onSelectFollower = (OnSelectFollower) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "must implement OnSelectFollower");
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,5 +134,10 @@ public class FollowersFragment extends Fragment implements FollowersFragmentCont
     @Override
     public String getClientSecret() {
         return mClientSecret;
+    }
+
+    @Override
+    public void followerSelected(User user) {
+        onSelectFollower.onSelectFollower(user);
     }
 }

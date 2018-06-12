@@ -1,5 +1,6 @@
 package com.job.github.mvp.presenter;
 
+import com.job.github.api.pojo.User;
 import com.job.github.utils.UserWithImage;
 
 /**
@@ -16,4 +17,6 @@ public interface FollowersFragmentContractView {
     String getClientId();
 
     String getClientSecret();
+
+    void followerSelected(User user);
 }

@@ -65,7 +65,7 @@ public class WebViewFragment extends Fragment implements WebViewContractView {
 
     @Override
     public void dismissDialog() {
-        if (mDialog.isShowing()) {
+        if (mDialog != null && mDialog.isShowing()) {
             mDialog.dismiss();
         }
     }

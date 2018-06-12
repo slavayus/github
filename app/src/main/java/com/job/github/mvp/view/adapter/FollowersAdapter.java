@@ -1,6 +1,7 @@
 package com.job.github.mvp.view.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,16 @@ import butterknife.ButterKnife;
  */
 
 public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.FollowersHolder> {
+    private final OnItemClickListener listener;
     private List<UserWithImage> data = new ArrayList<>();
+
+    public FollowersAdapter(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(UserWithImage userWithImage);
+    }
 
     @NonNull
     @Override
@@ -34,7 +44,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
 
     @Override
     public void onBindViewHolder(@NonNull FollowersHolder holder, int position) {
-        holder.bind(data.get(position));
+        holder.bind(data.get(position), listener);
     }
 
     @Override
@@ -56,17 +66,19 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
         @BindView(R.id.user_login) TextView mUserLogin;
         @BindView(R.id.user_location) TextView mUserLocation;
         @BindView(R.id.user_image) ImageView mUserImage;
+        @BindView(R.id.follower) ConstraintLayout follower;
 
         FollowersHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        void bind(UserWithImage user) {
+        void bind(UserWithImage user, OnItemClickListener listener) {
             mUserLocation.setText(user.getUser().getLocation());
             mUserLogin.setText(user.getUser().getLogin());
             mUserName.setText(user.getUser().getName());
             mUserImage.setImageBitmap(user.getBitmap());
+            follower.setOnClickListener(v -> listener.onItemClick(user));
         }
     }
 
