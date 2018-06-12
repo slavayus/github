@@ -6,6 +6,7 @@ import com.job.github.api.GitHubApi;
 import com.job.github.api.pojo.Repos;
 import com.job.github.database.AppDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -78,6 +79,12 @@ public class ReposModel implements ReposContractModel {
         new Thread() {
             @Override
             public void run() {
+                List<Integer> reposId = new ArrayList<>();
+                for (Repos repos : body) {
+                    reposId.add(repos.getId());
+                }
+                appDatabase.reposDao().removedRepos(reposId);
+
                 appDatabase.reposDao().insertAll(body);
                 appDatabase.close();
             }
