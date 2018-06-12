@@ -3,7 +3,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Overview</string>
     <string name="title_dashboard">Repositories</string>
-    <string name="title_stars">Stars</string>
+    <string name="title_followers">Followers</string>
     <string name="authentication">Authentication</string>
     <string name="user_avatar">user avatar</string>
     <string name="user_home_dialog_error_title">Error</string>
@@ -37,4 +37,6 @@
     <string name="edit_done">done</string>
     <string name="noti_channel_repos">Repositories</string>
     <string name="repo_was_updated_message">Was updated</string>
+    <string name="user_login">login</string>
+    <string name="user_image">user image</string>
 </resources>

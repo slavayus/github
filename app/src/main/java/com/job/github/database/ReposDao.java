@@ -20,4 +20,7 @@ public interface ReposDao {
 
     @Query("SELECT * FROM repos ORDER BY  pushedAt DESC")
     List<Repos> getAll();
+
+    @Query("DELETE FROM repos WHERE id NOT IN (:reposId)")
+    void removedRepos(List<Integer> reposId);
 }

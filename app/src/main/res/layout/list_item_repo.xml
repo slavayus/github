@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingEnd="@dimen/activity_vertical_margin"
-    android:paddingStart="@dimen/activity_vertical_margin"
-    android:background="@drawable/ripple"
+    android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
+    android:paddingEnd="@dimen/activity_vertical_margin"
+    android:paddingStart="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_horizontal_margin">
 
     <TextView
@@ -41,14 +41,14 @@
         <TextView
             android:id="@+id/repo_stars"
             style="@style/DarkTheme.TextView"
-            android:drawableStart="@drawable/ic_repo_star"
+            android:drawableStart="@drawable/ic_repo_star_24dp"
             android:padding="0dp"
             android:text="@string/repo_stars" />
 
         <TextView
             android:id="@+id/repo_license"
             style="@style/DarkTheme.TextView"
-            android:drawableStart="@drawable/ic_license"
+            android:drawableStart="@drawable/ic_license_24dp"
             android:text="@string/repo_license" />
     </com.google.android.flexbox.FlexboxLayout>
 

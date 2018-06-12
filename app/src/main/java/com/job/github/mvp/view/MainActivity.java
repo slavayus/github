@@ -17,11 +17,13 @@ import com.job.github.api.pojo.User;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements WebViewFragment.OnGetToken, HomeFragment.OnUserGet {
+public class MainActivity extends AppCompatActivity implements WebViewFragment.OnGetToken, HomeFragment.OnUserGet, FollowersFragment.OnSelectFollower {
     private static final String TAG = "MainActivity";
     private static final String HOME_FRAGMENT = "HOME_FRAGMENT";
     private static final String REPOS_FRAGMENT = "REPOS_FRAGMENT";
     private static final String WEBVIEW_FRAGMENT = "WEBVIEW_FRAGMENT";
+    private static final String FOLLOWERS_FRAGMENT = "FOLLOWERS_FRAGMENT";
+    private static final String FOLLOWERS_HOME_FRAGMENT = "FOLLOWERS_HOME_FRAGMENT";
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
     private String mToken;
@@ -50,13 +52,31 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
                     } else {
                         return false;
                     }
-                case R.id.navigation_stars:
-
-                    return true;
+                case R.id.navigation_followers:
+                    if (mUser != null) {
+                        setUpFollowersFragment();
+                        return true;
+                    }
+                    return false;
             }
             return false;
         }
     };
+
+    private void setUpFollowersFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FOLLOWERS_FRAGMENT);
+        if (fragment == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, FollowersFragment.newInstance(mUser.getLogin(), clientId, clientSecret), FOLLOWERS_FRAGMENT)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .attach(fragment)
+                    .commit();
+        }
+    }
 
     private void setUpReposFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(REPOS_FRAGMENT);
@@ -137,5 +157,21 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.O
     @Override
     public void onUserGet(User user) {
         this.mUser = user;
+    }
+
+    @Override
+    public void onSelectFollower(User user) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FOLLOWERS_HOME_FRAGMENT);
+        if (fragment == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, HomeFragment.newInstance(user), FOLLOWERS_HOME_FRAGMENT)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .attach(fragment)
+                    .commit();
+        }
     }
 }

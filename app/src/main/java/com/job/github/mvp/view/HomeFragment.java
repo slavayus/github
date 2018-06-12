@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -51,9 +52,11 @@ public class HomeFragment extends Fragment implements HomeContractView {
     @BindView(R.id.user_location) TextView userLocation;
     @BindView(R.id.user_blog) TextView userBlog;
     @BindView(R.id.user_email) TextView userEmail;
+    @BindView(R.id.fab) FloatingActionButton floatingActionButton;
     @Inject HomePresenter mPresenter;
     private Unbinder bind;
     private User user;
+    private User mUser;
 
     public interface OnUserGet {
         void onUserGet(User user);
@@ -92,7 +95,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
 
     @Override
     public void stopProgressDialog() {
-        if (dialog.isShowing()) {
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
     }
@@ -111,9 +114,10 @@ public class HomeFragment extends Fragment implements HomeContractView {
     private void loadTokenFromArguments() {
         Bundle arguments = getArguments();
         if (arguments == null) {
-            throw new IllegalArgumentException("There is no token in arguments");
+            throw new IllegalArgumentException("There is no token or user in arguments");
         } else {
             mToken = arguments.getString(TOKEN);
+            mUser = arguments.getParcelable(USER);
         }
     }
 
@@ -131,6 +135,9 @@ public class HomeFragment extends Fragment implements HomeContractView {
 
         mPresenter.attachView(this);
         mPresenter.viewIsReady();
+
+        floatingActionButton.setVisibility(mToken == null ? View.GONE : View.VISIBLE);
+
         Log.d(TAG, "onCreateView: ");
         return view;
     }
@@ -158,7 +165,9 @@ public class HomeFragment extends Fragment implements HomeContractView {
     void userInfoClick(View view) {
         switch (view.getId()) {
             case R.id.user_bio:
-                mPresenter.userBioButtonClick();
+                if (mToken != null) {
+                    mPresenter.userBioButtonClick();
+                }
                 break;
             case R.id.user_email:
                 mPresenter.userEmailButtonClick();
@@ -205,6 +214,11 @@ public class HomeFragment extends Fragment implements HomeContractView {
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+    }
+
+    @Override
+    public User getUser() {
+        return mUser;
     }
 
     @Override
@@ -261,8 +275,10 @@ public class HomeFragment extends Fragment implements HomeContractView {
 
     @Override
     public void updateUserInfo(User user) {
-        if (user.getBio() != null) {
+        if (user.getBio() != null && !user.getBio().isEmpty()) {
             userBio.setText(user.getBio());
+        } else {
+            userBio.setText("");
         }
 
         if (user.getCompany() == null) {
@@ -272,7 +288,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
             userCompany.setText(user.getCompany());
         }
 
-        if (user.getLogin() == null) {
+        if (user.getLocation() == null) {
             userLocation.setVisibility(View.GONE);
         } else {
             userLocation.setVisibility(View.VISIBLE);
@@ -286,12 +302,21 @@ public class HomeFragment extends Fragment implements HomeContractView {
             userEmail.setText(user.getEmail());
         }
 
-        if (user.getBlog() == null) {
+        if (user.getBlog() == null || "".equals(user.getBlog())) {
             userBlog.setVisibility(View.GONE);
         } else {
             userBlog.setVisibility(View.VISIBLE);
             userBlog.setText(user.getBlog());
         }
+    }
+
+    public static Fragment newInstance(User user) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(USER, user);
+
+        HomeFragment homeFragment = new HomeFragment();
+        homeFragment.setArguments(bundle);
+        return homeFragment;
     }
 
     public static HomeFragment newInstance(String token) {

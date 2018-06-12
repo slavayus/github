@@ -18,6 +18,7 @@ import com.job.github.api.pojo.Repos;
 import com.job.github.dagger.component.DaggerReposFragmentComponent;
 import com.job.github.dagger.component.DaggerReposPresenterComponent;
 import com.job.github.dagger.module.ApplicationContextModule;
+import com.job.github.dagger.module.ReposContextModule;
 import com.job.github.mvp.presenter.ReposContractView;
 import com.job.github.mvp.presenter.ReposPresenter;
 import com.job.github.mvp.view.adapter.ReposAdapter;
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ReposFragment extends Fragment implements ReposContractView {
-    private static final String USER_NAME = "USER_NAME";
+    private static final String USER_NAME = "USER_LOGIN";
     private static final String TAG = "ReposFragment";
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
@@ -77,6 +78,7 @@ public class ReposFragment extends Fragment implements ReposContractView {
                                 .applicationContextModule(new ApplicationContextModule(getContext()))
                                 .build()
                 )
+                .reposContextModule(new ReposContextModule(getContext()))
                 .build()
                 .injectReposFragment(this);
 

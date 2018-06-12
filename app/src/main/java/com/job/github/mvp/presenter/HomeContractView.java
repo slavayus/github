@@ -29,4 +29,6 @@ public interface HomeContractView {
     void openEditBioDialog();
 
     void showErrorUpdateUserInfoDialog();
+
+    User getUser();
 }

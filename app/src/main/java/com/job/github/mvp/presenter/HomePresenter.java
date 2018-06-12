@@ -26,8 +26,25 @@ public class HomePresenter {
     }
 
     public void viewIsReady() {
-        downloadUser();
+        User user = view.get().getUser();
+        if (user == null) {
+            downloadUser();
+        } else {
+            showUserInfo(user);
+        }
     }
+
+    private void showUserInfo(User data) {
+        if (viewIsValid()) {
+            view.get().updateToolbarText(data.getName() == null || data.getName().isEmpty() ? data.getLogin() : data.getName(), data.getLogin());
+            view.get().updateUserInfo(data);
+            view.get().onUserGet(data);
+            clientPreferences.setUserLogin(data.getLogin());
+            view.get().stopProgressDialog();
+            downloadAvatar(data.getAvatarUrl());
+        }
+    }
+
 
     private void downloadUser() {
         if (!viewIsValid()) {
@@ -38,14 +55,7 @@ public class HomePresenter {
 
             @Override
             public void onSuccess(User data) {
-                if (viewIsValid()) {
-                    view.get().updateToolbarText(data.getName(), data.getLogin());
-                    view.get().updateUserInfo(data);
-                    view.get().onUserGet(data);
-                    clientPreferences.setUserLogin(data.getLogin());
-                    view.get().stopProgressDialog();
-                    downloadAvatar(data.getAvatarUrl());
-                }
+                showUserInfo(data);
             }
 
             @Override

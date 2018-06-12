@@ -21,25 +21,25 @@
         <TextView
             android:id="@+id/user_company"
             style="@style/DarkTheme.TextView.Home"
-            android:drawableStart="@drawable/ic_company"
+            android:drawableStart="@drawable/ic_company_24dp"
             android:text="@string/user_company" />
 
         <TextView
             android:id="@+id/user_location"
             style="@style/DarkTheme.TextView.Home"
-            android:drawableStart="@drawable/ic_location"
+            android:drawableStart="@drawable/ic_location_on_24dp"
             android:text="@string/user_location" />
 
         <TextView
             android:id="@+id/user_email"
             style="@style/DarkTheme.TextView.Home.Link"
-            android:drawableStart="@drawable/ic_dialog_email"
+            android:drawableStart="@drawable/ic_email_24dp"
             android:text="@string/user_email" />
 
         <TextView
             android:id="@+id/user_blog"
             style="@style/DarkTheme.TextView.Home.Link"
-            android:drawableStart="@drawable/ic_blog"
+            android:drawableStart="@drawable/ic_blog_24dp"
             android:text="@string/user_blog" />
 
     </LinearLayout>

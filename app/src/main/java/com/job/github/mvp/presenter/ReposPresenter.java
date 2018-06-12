@@ -49,7 +49,7 @@ public class ReposPresenter {
                         }
                         view.get().stopLoaderFragment();
                         view.get().showRepos(data);
-                        if (data.get(0) != null) {
+                        if (data.size() > 0 && data.get(0) != null) {
                             clientPreferences.setLastRepo(data.get(0).getName());
                         }
                     }

@@ -1,7 +1,14 @@
 package com.job.github.mvp.view.adapter;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +24,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ReposHolder> {
+    private final Context context;
     private List<Repos> mData = new ArrayList<>();
+
+    public ReposAdapter(Context context) {
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -43,6 +55,7 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ReposHolder>
     }
 
     class ReposHolder extends RecyclerView.ViewHolder {
+        private static final String TAG = "ReposHolder";
         @BindView(R.id.repo_name) TextView mRepoName;
         @BindView(R.id.repo_description) TextView mRepoDescription;
         @BindView(R.id.repo_language) TextView mRepoLanguage;
@@ -65,7 +78,9 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ReposHolder>
             }
 
             mRepoLanguage.setText(repos.getLanguage());
-            mRepoLanguage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_language_color_shape, 0, 0, 0);
+            if (repos.getLanguage() != null) {
+                setUpRepoLanguageColor(repos.getLanguage());
+            }
 
             if (repos.getStargazersCount() == 0) {
                 mRepoStars.setVisibility(View.GONE);
@@ -79,6 +94,24 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ReposHolder>
             } else {
                 mRepoLicense.setVisibility(View.VISIBLE);
                 mRepoLicense.setText(repos.getLicense().getName());
+            }
+        }
+
+        private int getColor(String language) {
+            int hash = language.hashCode();
+            while (hash < 99_99_99_99) {
+                hash *= 2;
+            }
+            return hash;
+        }
+
+        void setUpRepoLanguageColor(String language) {
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_language_color_shape);
+            if (drawable != null) {
+                int color = getColor(language);
+                drawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(String.format("#%06X", 0xFFFFFF & color)), PorterDuff.Mode.SRC));
+                Log.d(TAG, "bind: color has been changed");
+                mRepoLanguage.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
             }
         }
     }
