@@ -50,6 +50,6 @@
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:background="?attr/startAppText"
-        app:layout_constraintTop_toBottomOf="@id/user_location" />
+        app:layout_constraintTop_toBottomOf="@id/user_image" />
 
 </android.support.constraint.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.job.github.mvp.view.adapter;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import butterknife.ButterKnife;
  */
 
 public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.FollowersHolder> {
+    private static final String TAG = "FollowersAdapter";
     private final OnItemClickListener listener;
     private List<UserWithImage> data = new ArrayList<>();
 
@@ -54,10 +56,12 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
 
     public void addUser(UserWithImage user) {
         data.add(user);
+        user.setIndex(data.size()-1);
         notifyItemInserted(data.size());
     }
 
     public void updateUserAvatar(int i) {
+        Log.d(TAG, "updateUserAvatar: notifyed number : " + i);
         notifyItemChanged(i);
     }
 
@@ -74,9 +78,14 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
         }
 
         void bind(UserWithImage user, OnItemClickListener listener) {
-            mUserLocation.setText(user.getUser().getLocation());
+            if (user.getUser().getLocation() == null || user.getUser().getLocation().isEmpty()) {
+                mUserLocation.setVisibility(View.GONE);
+            } else {
+                mUserLocation.setVisibility(View.VISIBLE);
+                mUserLocation.setText(user.getUser().getLocation());
+            }
             mUserLogin.setText(user.getUser().getLogin());
-            mUserName.setText(user.getUser().getName());
+            mUserName.setText(user.getUser().getName() == null || user.getUser().getName().isEmpty() ? user.getUser().getLogin() : user.getUser().getName());
             mUserImage.setImageBitmap(user.getBitmap());
             follower.setOnClickListener(v -> listener.onItemClick(user));
         }

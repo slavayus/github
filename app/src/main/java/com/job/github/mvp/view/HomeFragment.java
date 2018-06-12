@@ -275,8 +275,10 @@ public class HomeFragment extends Fragment implements HomeContractView {
 
     @Override
     public void updateUserInfo(User user) {
-        if (user.getBio() != null) {
+        if (user.getBio() != null && !user.getBio().isEmpty()) {
             userBio.setText(user.getBio());
+        } else {
+            userBio.setText("");
         }
 
         if (user.getCompany() == null) {
@@ -286,7 +288,7 @@ public class HomeFragment extends Fragment implements HomeContractView {
             userCompany.setText(user.getCompany());
         }
 
-        if (user.getLogin() == null) {
+        if (user.getLocation() == null) {
             userLocation.setVisibility(View.GONE);
         } else {
             userLocation.setVisibility(View.VISIBLE);

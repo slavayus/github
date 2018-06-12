@@ -1,6 +1,7 @@
 package com.job.github.mvp.presenter;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.job.github.api.pojo.User;
 import com.job.github.mvp.model.FollowersFragmentContractModel;
@@ -46,7 +47,7 @@ public class FollowersFragmentPresenter {
             @Override
             public void onSuccess(List<User> users) {
                 for (int i = 0; i < users.size(); i++) {
-                    downloadUser(users.get(i), i);
+                    downloadUser(users.get(i));
                 }
             }
 
@@ -57,7 +58,7 @@ public class FollowersFragmentPresenter {
         });
     }
 
-    private void downloadUser(User user, final int i) {
+    private void downloadUser(User user) {
         if (!viewIsValid()) {
             return;
         }
@@ -66,8 +67,10 @@ public class FollowersFragmentPresenter {
             public void onSuccess(User resultUser) {
                 if (viewIsValid()) {
                     UserWithImage userWithImage = new UserWithImage(resultUser);
-                    view.get().addNewUser(userWithImage);
-                    downloadUserAvatar(userWithImage, i);
+                    if (viewIsValid()) {
+                        view.get().addNewUser(userWithImage);
+                        downloadUserAvatar(userWithImage);
+                    }
                 }
             }
 
@@ -78,14 +81,15 @@ public class FollowersFragmentPresenter {
         });
     }
 
-    private void downloadUserAvatar(UserWithImage userWithImage, int i) {
+    private void downloadUserAvatar(final UserWithImage userWithImage) {
         model.downloadUserAvatar(userWithImage.getUser().getAvatarUrl(), new FollowersFragmentContractModel.OnDownloadUserAvatar() {
 
             @Override
             public void onSuccess(Bitmap bm) {
                 userWithImage.setBitmap(bm);
                 if (viewIsValid()) {
-                    view.get().updateUserAvatar(i);
+                    Log.d(TAG, "onSuccess: download avatar number: " + userWithImage.getIndex() + " " + userWithImage.getUser().getName());
+                    view.get().updateUserAvatar(userWithImage.getIndex());
                 }
             }
 

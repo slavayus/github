@@ -117,12 +117,12 @@ public class FollowersFragment extends Fragment implements FollowersFragmentCont
     }
 
     @Override
-    public void addNewUser(UserWithImage user) {
+    public synchronized void addNewUser(UserWithImage user) {
         mAdapter.addUser(user);
     }
 
     @Override
-    public void updateUserAvatar(int i) {
+    public synchronized void updateUserAvatar(int i) {
         mAdapter.updateUserAvatar(i);
     }
 

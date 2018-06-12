@@ -11,6 +11,7 @@ import com.job.github.api.pojo.User;
 public class UserWithImage {
     private User user;
     private Bitmap bitmap;
+    private int index;
 
     public UserWithImage(User user) {
         this.user = user;
@@ -30,5 +31,13 @@ public class UserWithImage {
 
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

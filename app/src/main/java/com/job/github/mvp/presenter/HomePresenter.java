@@ -36,7 +36,7 @@ public class HomePresenter {
 
     private void showUserInfo(User data) {
         if (viewIsValid()) {
-            view.get().updateToolbarText(data.getName(), data.getLogin());
+            view.get().updateToolbarText(data.getName() == null || data.getName().isEmpty() ? data.getLogin() : data.getName(), data.getLogin());
             view.get().updateUserInfo(data);
             view.get().onUserGet(data);
             clientPreferences.setUserLogin(data.getLogin());
