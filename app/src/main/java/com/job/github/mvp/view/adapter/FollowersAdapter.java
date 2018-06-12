@@ -5,10 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.job.github.R;
-import com.job.github.api.pojo.User;
+import com.job.github.utils.UserWithImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import butterknife.ButterKnife;
  */
 
 public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.FollowersHolder> {
-    private List<User> data = new ArrayList<>();
+    private List<UserWithImage> data = new ArrayList<>();
 
     @NonNull
     @Override
@@ -41,25 +42,31 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
         return data.size();
     }
 
-    public void addUser(User user) {
+    public void addUser(UserWithImage user) {
         data.add(user);
         notifyItemInserted(data.size());
+    }
+
+    public void updateUserAvatar(int i) {
+        notifyItemChanged(i);
     }
 
     class FollowersHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.user_name) TextView mUserName;
         @BindView(R.id.user_login) TextView mUserLogin;
         @BindView(R.id.user_location) TextView mUserLocation;
+        @BindView(R.id.user_image) ImageView mUserImage;
 
         FollowersHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        void bind(User user) {
-            mUserLocation.setText(user.getLocation());
-            mUserLogin.setText(user.getLogin());
-            mUserName.setText(user.getName());
+        void bind(UserWithImage user) {
+            mUserLocation.setText(user.getUser().getLocation());
+            mUserLogin.setText(user.getUser().getLogin());
+            mUserName.setText(user.getUser().getName());
+            mUserImage.setImageBitmap(user.getBitmap());
         }
     }
 

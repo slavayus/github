@@ -1,6 +1,6 @@
 package com.job.github.mvp.presenter;
 
-import com.job.github.api.pojo.User;
+import com.job.github.utils.UserWithImage;
 
 /**
  * Created by slavik on 6/11/18.
@@ -9,5 +9,11 @@ import com.job.github.api.pojo.User;
 public interface FollowersFragmentContractView {
     String getUserLogin();
 
-    void addNewUser(User user);
+    void addNewUser(UserWithImage user);
+
+    void updateUserAvatar(int i);
+
+    String getClientId();
+
+    String getClientSecret();
 }

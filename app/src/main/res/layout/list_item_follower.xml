@@ -10,11 +10,22 @@
     android:paddingStart="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_horizontal_margin">
 
+    <ImageView
+        android:id="@+id/user_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/user_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/colorPrimary" />
+
     <TextView
         android:id="@+id/user_name"
         style="@style/DarkTheme.TextView.Home"
         android:text="@string/user_name"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/user_image"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -30,8 +41,8 @@
         style="@style/DarkTheme.TextView.Followers"
         android:drawableStart="@drawable/ic_location"
         android:text="@string/user_location"
-        app:layout_constraintTop_toBottomOf="@+id/user_login"
-        app:layout_constraintStart_toStartOf="@+id/user_name" />
+        app:layout_constraintStart_toStartOf="@+id/user_name"
+        app:layout_constraintTop_toBottomOf="@+id/user_login" />
 
     <View
         android:layout_width="wrap_content"

@@ -38,4 +38,5 @@
     <string name="noti_channel_repos">Repositories</string>
     <string name="repo_was_updated_message">Was updated</string>
     <string name="user_login">login</string>
+    <string name="user_image">user image</string>
 </resources>
