@@ -35,4 +35,10 @@ public interface GitHubApi {
 
     @PATCH("/user")
     Call<User> updateUserInfo(@Query("access_token") String token, @Body User user);
+
+    @GET("/users/{user_name}/followers")
+    Call<List<User>> getFollowers(@Path("user_name") String userName, @Query("client_id") String clientId, @Query("client_secret") String clientSecret);
+
+    @GET("/users/{user_name}")
+    Call<User> getUserByLogin(@Path("user_name") String userName, @Query("client_id") String clientId, @Query("client_secret") String clientSecret);
 }

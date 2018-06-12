@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ReposFragment extends Fragment implements ReposContractView {
-    private static final String USER_NAME = "USER_NAME";
+    private static final String USER_NAME = "USER_LOGIN";
     private static final String TAG = "ReposFragment";
     private static String CLIENT_ID = "CLIENT_ID";
     private static String CLIENT_SECRET = "CLIENT_SECRET";
