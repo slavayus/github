@@ -9,4 +9,10 @@
     <dimen name="list_item_repo_text_view_separator">8dp</dimen>
     <dimen name="toolbar_subtitle_text_margin">28dp</dimen>
     <dimen name="toolbar_subtitle_text_size">18sp</dimen>
+    <dimen name="follower_image_width">60dp</dimen>
+    <dimen name="follower_image_height">60dp</dimen>
+    <dimen name="vector_width">24dp</dimen>
+    <dimen name="vector_height">24dp</dimen>
+    <item name="vector_viewport_width" type="dimen" format="float">24.0</item>
+    <item name="vector_viewport_height" type="dimen" format="float">24.0</item>
 </resources>
