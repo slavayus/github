@@ -10,11 +10,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-/**
- * Created by slavik on 6/1/18.
- */
 
 @Module(includes = {GsonFactoryModule.class})
 public class GitHubModule {
@@ -32,6 +29,7 @@ public class GitHubModule {
     Retrofit retrofit(GsonConverterFactory gsonConverterFactory) {
         return new Retrofit.Builder()
                 .baseUrl(URLHelper.API_BASE_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(gsonConverterFactory)
                 .build();
     }

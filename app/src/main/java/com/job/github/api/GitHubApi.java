@@ -6,6 +6,7 @@ import com.job.github.api.pojo.User;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -34,7 +35,7 @@ public interface GitHubApi {
     Call<User> updateBio(@Query("access_token") String token, @Body User user);
 
     @PATCH("/user")
-    Call<User> updateUserInfo(@Query("access_token") String token, @Body User user);
+    Single<User> updateUserInfo(@Query("access_token") String token, @Body User user);
 
     @GET("/users/{user_name}/followers")
     Call<List<User>> getFollowers(@Path("user_name") String userName, @Query("client_id") String clientId, @Query("client_secret") String clientSecret);
